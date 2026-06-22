@@ -803,19 +803,36 @@ function initPopup() {
   if (!overlay) return;
 
   const closeBtn = document.getElementById('popupClose');
+  const hideTodayBtn = document.getElementById('popupHideToday');
   const track    = document.getElementById('popupTrack');
   const dots     = document.querySelectorAll('.popup-dot');
   const prevBtn  = document.getElementById('popupPrev');
   const nextBtn  = document.getElementById('popupNext');
   const total    = dots.length;
+  const hideKey  = 'popupHiddenUntil';
   let current    = 0;
   let opened     = false;
+
+  function getHideUntil() {
+    const stored = Number(window.localStorage.getItem(hideKey) || 0);
+    return Number.isFinite(stored) ? stored : 0;
+  }
+
+  function isHiddenToday() {
+    return getHideUntil() > Date.now();
+  }
+
+  function hideUntilTomorrow() {
+    const tomorrow = new Date();
+    tomorrow.setHours(24, 0, 0, 0);
+    window.localStorage.setItem(hideKey, String(tomorrow.getTime()));
+  }
 
   function loadPopupImages() {
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
     const targets = overlay.querySelectorAll((isMobile ? '.popup-mobile' : '.popup-pc') + ' img[data-src]');
-    targets.forEach((img, index) => {
-      if (!img.getAttribute('src') && (index === 0 || !isMobile)) {
+    targets.forEach((img) => {
+      if (!img.getAttribute('src')) {
         img.src = img.dataset.src;
       }
     });
@@ -823,7 +840,7 @@ function initPopup() {
 
   function goTo(n) {
     current = (n + total) % total;
-    const slides = track.querySelectorAll('img[data-src]');
+    const slides = track.querySelectorAll('.popup-slide img[data-src]');
     const currentImg = slides[current];
     if (currentImg && !currentImg.getAttribute('src')) currentImg.src = currentImg.dataset.src;
     track.style.transform = `translateX(-${current * 100}%)`;
@@ -831,14 +848,17 @@ function initPopup() {
   }
 
   function openPopup() {
-    if (opened) return;
+    if (opened || isHiddenToday()) return;
     opened = true;
+    current = 0;
     loadPopupImages();
+    goTo(0);
     overlay.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
   }
 
   function closePopup() {
+    opened = false;
     overlay.classList.add('hidden');
     document.body.style.overflow = '';
   }
@@ -846,11 +866,17 @@ function initPopup() {
   prevBtn.addEventListener('click', () => goTo(current - 1));
   nextBtn.addEventListener('click', () => goTo(current + 1));
   closeBtn.addEventListener('click', closePopup);
+  if (hideTodayBtn) {
+    hideTodayBtn.addEventListener('click', () => {
+      hideUntilTomorrow();
+      closePopup();
+    });
+  }
   overlay.addEventListener('click', (e) => { if (e.target === overlay) closePopup(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePopup(); });
 
   const popupDelay = window.matchMedia('(max-width: 768px)').matches ? 4500 : 3000;
-  window.setTimeout(openPopup, popupDelay);
+  if (!isHiddenToday()) window.setTimeout(openPopup, popupDelay);
 }
 
 /* ??????????????????????????????????????????

@@ -376,10 +376,12 @@
 
       <!-- 모바일: 1장씩 슬라이더 -->
       <div class="popup-mobile">
+        <div class="popup-viewport">
         <div class="popup-track" id="popupTrack">
           <div class="popup-slide"><img data-src="images/popup/popup.png" alt="혜택 안내 1" loading="lazy" decoding="async"></div>
           <div class="popup-slide"><img data-src="images/popup/popup1.png" alt="혜택 안내 2" loading="lazy" decoding="async"></div>
           <div class="popup-slide"><img data-src="images/popup/popup2.png" alt="혜택 안내 3" loading="lazy" decoding="async"></div>
+        </div>
         </div>
         <button class="popup-arrow popup-prev" id="popupPrev" aria-label="이전 이미지">&#10094;</button>
         <button class="popup-arrow popup-next" id="popupNext" aria-label="다음 이미지">&#10095;</button>
@@ -388,6 +390,9 @@
           <span class="popup-dot"></span>
           <span class="popup-dot"></span>
         </div>
+      </div>
+      <div class="popup-actions">
+        <button type="button" class="popup-hide-today" id="popupHideToday">오늘 하루 안 보기</button>
       </div>
     </div>
   </div>

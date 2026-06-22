@@ -1829,6 +1829,28 @@ section { padding: 88px 0; }
   width: 100%;
 }
 
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.popup-hide-today {
+  appearance: none;
+  border: 0;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.92);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.popup-hide-today:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 /* 닫기 버튼 */
 .popup-close {
   position: absolute;
@@ -1872,6 +1894,10 @@ section { padding: 88px 0; }
 .popup-mobile { display: none; }
 
 @media (max-width: 768px) {
+  .popup-overlay { padding: 18px; }
+  .popup-box {
+    width: min(calc(100vw - 96px), 252px);
+  }
   .popup-pc { display: none; }
 
   .popup-mobile {
@@ -1879,15 +1905,21 @@ section { padding: 88px 0; }
     position: relative;
   }
 
-  .popup-track {
-    display: flex;
+  .popup-viewport {
     overflow: hidden;
     border-radius: 8px;
   }
 
+  .popup-track {
+    display: flex;
+    width: 100%;
+    transition: transform 0.32s ease;
+    will-change: transform;
+  }
+
   .popup-slide {
     flex: 0 0 100%;
-    width: 100%;
+    min-width: 100%;
   }
   .popup-slide img {
     width: 100%;
@@ -1897,19 +1929,17 @@ section { padding: 88px 0; }
     border-radius: 8px;
   }
 
-  .popup-track { transition: transform 0.32s ease; }
-
   .popup-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 38px;
-    height: 38px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.45);
     border: none;
     color: #fff;
-    font-size: 16px;
+    font-size: 13px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1919,23 +1949,43 @@ section { padding: 88px 0; }
     line-height: 1;
   }
   .popup-arrow:hover { background: rgba(0, 0, 0, 0.65); }
-  .popup-prev { left: 8px; }
-  .popup-next { right: 8px; }
+  .popup-prev { left: 6px; }
+  .popup-next { right: 6px; }
 
   .popup-dots {
     display: flex;
     justify-content: center;
-    gap: 6px;
-    padding: 10px 0 2px;
+    gap: 5px;
+    padding: 8px 0 0;
   }
   .popup-dot {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.35);
     transition: background 0.2s;
   }
   .popup-dot.active { background: #fff; }
+
+  .popup-close {
+    top: -34px;
+    right: 0;
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+    border-width: 1px;
+  }
+
+  .popup-actions {
+    justify-content: flex-end;
+    margin-top: 8px;
+    padding-bottom: max(2px, env(safe-area-inset-bottom));
+  }
+
+  .popup-hide-today {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -1955,7 +2005,30 @@ section { padding: 88px 0; }
     text-overflow: ellipsis;
   }
 
-  .hero-body { padding-top: 15vh; }
+  .hero-slide img {
+    object-fit: cover;
+    object-position: 52% 82%;
+    transform-origin: center bottom;
+  }
+  .hero-slide-overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(10, 24, 48, 0.44) 0%,
+        rgba(10, 24, 48, 0.16) 30%,
+        rgba(10, 24, 48, 0.08) 54%,
+        rgba(10, 24, 48, 0.26) 100%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(11, 27, 54, 0.54) 0%,
+        rgba(11, 27, 54, 0.2) 18%,
+        rgba(11, 27, 54, 0.06) 50%,
+        rgba(11, 27, 54, 0.2) 82%,
+        rgba(11, 27, 54, 0.54) 100%
+      );
+  }
+  .hero-body { padding-top: 11vh; }
   .hero-content { padding: 0 8px; }
   .hero-sub { font-size: 18px; margin-bottom: 10px; line-height: 1.25; }
   .hero-title {
@@ -1965,18 +2038,42 @@ section { padding: 88px 0; }
   }
   .hero-title-dark { padding: 4px 10px 5px; border-radius: 8px; }
   .hero-badge { font-size: 14px; padding: 7px 16px; letter-spacing: 0.08em; }
-  .hero-cta {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .hero-bottom-strip {
+    bottom: 34px;
+    left: 12px;
+    right: 12px;
     gap: 8px;
   }
-  .hero-benefit-btn {
-    max-width: none;
-    min-height: 88px;
-    padding: 12px 8px;
+  .hero-bottom-strip .hero-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: min(100%, 188px);
+    max-width: 188px;
+    padding: 0;
+    margin: 0 auto;
+    gap: 5px;
   }
-  .hero-bottom-strip { bottom: 78px; left: 16px; right: 16px; gap: 10px; }
-  .hero-bottom-strip .hero-cta { padding: 0; }
+  .hero-benefit-btn {
+    flex: none;
+    width: 100%;
+    max-width: none;
+    min-height: 0;
+    padding: 8px 10px 9px;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(255, 248, 240, 0.97) 0%, rgba(245, 233, 217, 0.95) 100%);
+    border-color: rgba(221, 190, 146, 0.46);
+    text-align: center;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.74),
+      0 6px 12px rgba(10, 22, 42, 0.1);
+  }
+  .benefit-label { font-size: 9px; letter-spacing: 0.08em; line-height: 1.1; }
+  .benefit-value { font-size: 13px; line-height: 1.16; }
 
   .tab-bar {
     flex-wrap: wrap;
@@ -2032,16 +2129,20 @@ section { padding: 88px 0; }
 
 @media (max-width: 480px) {
   .container { padding: 0 14px; }
-  .hero-body { padding-top: 13vh; }
+  .hero-slide img { object-position: 50% 80%; }
+  .hero-body { padding-top: 9vh; }
   .hero-sub { font-size: 16px; }
   .hero-title { font-size: clamp(24px, 8.2vw, 30px); }
-  .hero-cta {
-    grid-template-columns: 1fr;
-    max-width: 320px;
-    margin: 0 auto;
+  .hero-bottom-strip .hero-cta { width: min(100%, 170px); max-width: 170px; gap: 4px; }
+  .hero-benefit-btn {
+    min-height: 0;
+    padding: 7px 9px 8px;
+    gap: 1px;
+    border-radius: 11px;
   }
-  .hero-benefit-btn { min-height: 72px; }
-  .hero-bottom-strip { bottom: 84px; }
+  .benefit-label { font-size: 8px; }
+  .benefit-value { font-size: 12px; line-height: 1.14; }
+  .hero-bottom-strip { bottom: 22px; left: 14px; right: 14px; gap: 7px; }
   .hero-badge { font-size: 12px; padding: 6px 14px; }
   .overview-img { height: 180px; }
   .accordion-q { padding: 14px 14px; }
