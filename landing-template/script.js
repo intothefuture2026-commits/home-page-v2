@@ -641,17 +641,17 @@ function initContactForm() {
     setFormStatus('');
 
     if (!name) {
-      alert('?깊븿???낅젰?댁＜?몄슂.');
+      alert('성함을 입력해주세요.');
       el('inputName').focus();
       return;
     }
     if (!p1 || !p2 || !p3 || (p1 + p2 + p3).length < 9) {
-      alert('?곕씫泥섎? ?뺥솗???낅젰?댁＜?몄슂.');
+      alert('연락처를 정확히 입력해주세요.');
       phone1.focus();
       return;
     }
     if (!agree) {
-      alert('媛쒖씤?뺣낫 ?섏쭛쨌?댁슜???숈쓽?댁＜?몄슂.');
+      alert('개인정보 수집 및 이용에 동의해주세요.');
       el('agreeAll').focus();
       return;
     }
@@ -689,7 +689,7 @@ function initContactForm() {
         }
 
         setFormStatus('상담 신청이 접수되었습니다. 빠르게 연락드리겠습니다.', 'success');
-        alert(`?곷떞 ?좎껌???꾩닔?섏뿀?듬땲??\n?대떦?먭? ${p1}-${p2}-${p3}?쇰줈 ?곕씫?쒕━寃좎뒿?덈떎.`);
+        alert(`상담 신청이 접수되었습니다.\n입력하신 ${p1}-${p2}-${p3} 번호로 빠르게 연락드리겠습니다.`);
         form.reset();
       })
       .catch(error => {
