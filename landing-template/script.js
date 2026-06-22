@@ -20,7 +20,7 @@ function applyConfig() {
   const telHref = 'tel:' + phone.replace(/-/g, '');
 
   // ?섏씠吏 ??댄?
-  document.title = C.propertyName + ' ??遺꾩뼇?덈궡';
+  document.title = C.propertyName + ' 분양안내';
 
   // ?ㅻ퉬 濡쒓퀬
   el('navLogo').textContent = C.propertyName;
