@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>충주 경남아너스빌 센터원 — 분양안내</title>
+  <meta name="description" content="충주 경남아너스빌 센터원 공식 분양 안내 페이지" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ══════════════════════════════
+       1. 네비게이션 헤더
+  ══════════════════════════════ -->
+  <header class="nav-header" id="navHeader">
+    <div class="nav-inner container">
+      <a href="#" class="nav-logo" id="navLogo">LOGO</a>
+
+      <nav class="nav-menu" aria-label="주 메뉴">
+        <ul id="navList"></ul>
+      </nav>
+
+      <a class="nav-phone-btn" id="navPhoneBtn" href="tel:">
+        <span class="phone-icon" aria-hidden="true">📞</span>
+        <span id="navPhoneNum">1844-1588</span>
+      </a>
+
+      <button class="hamburger" id="hamburger" aria-label="메뉴 열기" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <!-- 모바일 드롭다운 -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+      <ul id="mobileNavList"></ul>
+      <div class="mobile-phone">
+        <a class="mobile-phone-link" id="mobilePhoneBtn" href="tel:">
+          <span aria-hidden="true">📞</span>
+          <span id="mobilePhoneNum"></span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ══════════════════════════════
+         2. 히어로 슬라이더
+    ══════════════════════════════ -->
+    <section class="hero" id="hero" aria-label="메인 히어로">
+
+      <!-- 슬라이더 트랙 -->
+      <div class="hero-slider-outer">
+        <div class="hero-slider-track" id="heroTrack">
+          <!-- JS가 채움 -->
+        </div>
+      </div>
+
+      <!-- 텍스트 콘텐츠 (슬라이드 위에 고정) -->
+      <div class="hero-body">
+        <div class="hero-content container">
+          <p class="hero-sub" id="heroSub">서브 카피</p>
+          <h1 class="hero-title" id="heroTitle">메인 카피</h1>
+        </div>
+      </div>
+
+      <!-- 하단 배지 + 혜택 버튼 그룹 -->
+      <div class="hero-bottom-strip">
+        <span class="hero-badge" id="heroBadge">특별혜택</span>
+        <div class="hero-cta" id="heroCta"></div>
+      </div>
+
+      <!-- 화살표 -->
+      <button class="hero-arrow hero-prev" id="heroPrev" aria-label="이전 슬라이드">&#10094;</button>
+      <button class="hero-arrow hero-next" id="heroNext" aria-label="다음 슬라이드">&#10095;</button>
+
+      <!-- 도트 -->
+      <div class="hero-dots" id="heroDots" role="tablist" aria-label="슬라이드 선택"></div>
+
+    </section>
+
+    <!-- ══════════════════════════════
+         3. 프리미엄 포인트
+    ══════════════════════════════ -->
+    <section class="premium" id="premium">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Premium Point</span>
+          <h2 class="section-title" id="premiumTitle">프리미엄 포인트</h2>
+        </div>
+        <div class="premium-grid" id="premiumGrid">
+          <!-- JS가 채움 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         4. 단지 개요
+    ══════════════════════════════ -->
+    <section class="overview" id="overview">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Overview</span>
+          <h2 class="section-title">단지 개요</h2>
+        </div>
+        <div class="overview-card">
+          <div class="overview-img-wrap">
+            <img id="overviewImg" src="" alt="단지 투시도" class="overview-img">
+            <p class="overview-img-caption" id="overviewCaption"></p>
+          </div>
+          <table class="overview-table">
+            <colgroup>
+              <col class="ov-col-label">
+              <col>
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col">구분</th>
+                <th scope="col">내용</th>
+              </tr>
+            </thead>
+            <tbody id="overviewTbody"><!-- JS가 채움 --></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         5. 위치 안내
+    ══════════════════════════════ -->
+    <section class="location" id="location">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Location</span>
+          <h2 class="section-title">위치 안내</h2>
+        </div>
+        <div class="location-layout">
+          <div class="location-map">
+            <img
+              data-src="images/location/location-map.png"
+              alt="위치 지도"
+              class="location-map-img"
+            >
+          </div>
+          <div class="location-points" id="locationPoints">
+            <!-- JS가 채움 -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         6. 갤러리
+    ══════════════════════════════ -->
+    <section class="gallery" id="gallery">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Gallery</span>
+          <h2 class="section-title">단지 갤러리</h2>
+        </div>
+        <div class="tab-bar" id="galleryTabBar" role="tablist" aria-label="갤러리 탭">
+          <!-- JS가 채움 -->
+        </div>
+        <div class="gallery-grid" id="galleryGrid">
+          <!-- JS가 채움 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         7. 평면도
+    ══════════════════════════════ -->
+    <section class="floorplan" id="floorplan">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Floor Plan</span>
+          <h2 class="section-title">평면도</h2>
+        </div>
+        <div class="tab-bar light" id="floorplanTabBar" role="tablist" aria-label="평면도 타입 선택">
+          <!-- JS가 채움 -->
+        </div>
+        <div class="floorplan-content" id="floorplanContent">
+          <!-- JS가 채움 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         8. FAQ
+    ══════════════════════════════ -->
+    <section class="faq" id="faq">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">FAQ</span>
+          <h2 class="section-title">자주 묻는 질문</h2>
+        </div>
+        <div class="accordion" id="faqAccordion">
+          <!-- JS가 채움 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         9. 상담 신청
+    ══════════════════════════════ -->
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Contact</span>
+          <h2 class="section-title">상담 신청</h2>
+          <p class="section-desc">전문 상담사가 빠르게 연락드립니다</p>
+        </div>
+
+        <form
+          class="contact-form"
+          id="contactForm"
+          action="https://formspree.io/f/mdaroned"
+          method="POST"
+          novalidate
+        >
+          <input type="hidden" name="_subject" value="랜딩페이지 상담 신청" />
+          <input type="hidden" name="phone" id="phoneCombined" />
+          <input type="hidden" name="privacyConsent" id="privacyConsent" value="agreed" />
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hp-field" aria-hidden="true" />
+
+          <!-- 성함 -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="inputName">성함 <span class="required" aria-label="필수">*</span></label>
+              <input type="text" id="inputName" name="name"
+                     placeholder="이름을 입력해주세요" autocomplete="name" required />
+            </div>
+          </div>
+
+          <!-- 연락처 3분할 -->
+          <div class="form-row phone-row">
+            <div class="form-group phone-part">
+              <label for="phone1">연락처 <span class="required" aria-label="필수">*</span></label>
+              <input type="text" id="phone1" name="phone1"
+                     maxlength="3" placeholder="010" inputmode="numeric" required />
+            </div>
+            <span class="phone-sep" aria-hidden="true">-</span>
+            <div class="form-group phone-part no-label">
+              <input type="text" id="phone2" name="phone2"
+                     maxlength="4" placeholder="0000" inputmode="numeric" required />
+            </div>
+            <span class="phone-sep" aria-hidden="true">-</span>
+            <div class="form-group phone-part no-label">
+              <input type="text" id="phone3" name="phone3"
+                     maxlength="4" placeholder="0000" inputmode="numeric" required />
+            </div>
+          </div>
+
+          <!-- 방문일 + 시간 -->
+          <div class="form-row two-col">
+            <div class="form-group">
+              <label for="visitDate">방문 희망일</label>
+              <input type="date" id="visitDate" name="visitDate" />
+            </div>
+            <div class="form-group">
+              <label for="visitTime">방문 희망 시간</label>
+              <select id="visitTime" name="visitTime">
+                <option value="">시간 선택</option>
+                <option value="09-10">09:00 ~ 10:00</option>
+                <option value="10-11">10:00 ~ 11:00</option>
+                <option value="11-12">11:00 ~ 12:00</option>
+                <option value="13-14">13:00 ~ 14:00</option>
+                <option value="14-15">14:00 ~ 15:00</option>
+                <option value="15-16">15:00 ~ 16:00</option>
+                <option value="16-17">16:00 ~ 17:00</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 문의 내용 -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="message">문의 내용</label>
+              <textarea id="message" name="message" rows="3"
+                        placeholder="궁금하신 내용을 입력해주세요 (선택)"></textarea>
+            </div>
+          </div>
+
+          <!-- 약관 동의 -->
+          <div class="form-row terms-row">
+            <label class="checkbox-label">
+              <input type="checkbox" id="agreeAll" name="agreeAll" />
+              <span>개인정보 수집·이용에 동의합니다 <span class="required">(필수)</span></span>
+            </label>
+            <button type="button" class="terms-detail-btn" id="termsToggle"
+                    aria-expanded="false" aria-controls="termsBox">
+              내용 보기 ▾
+            </button>
+          </div>
+          <div class="terms-box" id="termsBox" hidden>
+            <p>
+              <strong>수집 항목:</strong> 성명, 연락처<br />
+              <strong>수집 목적:</strong> 분양 상담 및 안내<br />
+              <strong>보유 기간:</strong> 상담 종료 후 1년<br /><br />
+              귀하는 개인정보 수집·이용에 동의하지 않을 권리가 있으며,
+              동의 거부 시 상담 신청이 제한될 수 있습니다.
+            </p>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-submit" id="contactSubmitBtn">상담 신청하기</button>
+          <p class="form-status" id="formStatus" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════════════════
+       10. 하단 고정 버튼바
+  ══════════════════════════════ -->
+  <div class="bottom-bar" id="bottomBar" role="complementary" aria-label="하단 빠른 메뉴">
+    <a class="bottom-bar-btn call" id="bottomCallBtn" href="tel:">
+      <span class="icon" aria-hidden="true">📞</span>
+      <span id="bottomCallLabel">전화 상담</span>
+    </a>
+    <a class="bottom-bar-btn visit" href="#contact">
+      <span class="icon" aria-hidden="true">📅</span>
+      <span id="bottomVisitLabel">방문 예약</span>
+    </a>
+  </div>
+
+  <!-- ══════════════════════════════
+       11. 플로팅 사이드 버튼
+  ══════════════════════════════ -->
+  <div class="floating-side" id="floatingSide" aria-label="플로팅 메뉴">
+    <a class="floating-btn call" id="floatCallBtn" href="tel:" title="전화 상담" aria-label="전화 상담">
+      <span aria-hidden="true">📞</span>
+    </a>
+    <a class="floating-btn kakao" href="#contact" title="카카오 상담" aria-label="카카오 상담">
+      <span aria-hidden="true">💬</span>
+    </a>
+    <a class="floating-btn top" href="#hero" title="맨 위로" aria-label="맨 위로 이동">
+      <span aria-hidden="true">▲</span>
+    </a>
+  </div>
+
+  <!-- ══════════════════════════════
+       12. 푸터
+  ══════════════════════════════ -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <p class="footer-logo" id="footerLogoName"></p>
+        <p class="footer-info" id="footerInfo"></p>
+        <hr class="footer-hr" />
+        <p class="footer-disclaimer" id="footerDisclaimer"></p>
+        <p class="footer-copy">© 2026 All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════
+       13. 혜택 안내 팝업
+  ══════════════════════════════ -->
+  <div class="popup-overlay hidden" id="popupOverlay">
+    <div class="popup-box">
+      <button class="popup-close" id="popupClose" aria-label="팝업 닫기">✕</button>
+
+      <!-- PC: 3장 가로 배열 -->
+      <div class="popup-pc">
+        <img data-src="images/popup/popup.png" alt="혜택 안내 1" loading="lazy" decoding="async">
+        <img data-src="images/popup/popup1.png" alt="혜택 안내 2" loading="lazy" decoding="async">
+        <img data-src="images/popup/popup2.png" alt="혜택 안내 3" loading="lazy" decoding="async">
+      </div>
+
+      <!-- 모바일: 1장씩 슬라이더 -->
+      <div class="popup-mobile">
+        <div class="popup-track" id="popupTrack">
+          <div class="popup-slide"><img data-src="images/popup/popup.png" alt="혜택 안내 1" loading="lazy" decoding="async"></div>
+          <div class="popup-slide"><img data-src="images/popup/popup1.png" alt="혜택 안내 2" loading="lazy" decoding="async"></div>
+          <div class="popup-slide"><img data-src="images/popup/popup2.png" alt="혜택 안내 3" loading="lazy" decoding="async"></div>
+        </div>
+        <button class="popup-arrow popup-prev" id="popupPrev" aria-label="이전 이미지">&#10094;</button>
+        <button class="popup-arrow popup-next" id="popupNext" aria-label="다음 이미지">&#10095;</button>
+        <div class="popup-dots">
+          <span class="popup-dot active"></span>
+          <span class="popup-dot"></span>
+          <span class="popup-dot"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
