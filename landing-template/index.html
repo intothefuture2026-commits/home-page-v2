@@ -30,12 +30,20 @@
     <div class="nav-inner container">
       <a href="#" class="nav-logo" id="navLogo">LOGO</a>
 
+      <button class="nav-top-btn" id="navTopBtn" aria-label="맨 위로" title="맨 위로">
+        <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M1 7.5L6 1.5L11 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
       <nav class="nav-menu" aria-label="주 메뉴">
         <ul id="navList"></ul>
       </nav>
 
       <a class="nav-phone-btn" id="navPhoneBtn" href="tel:">
-        <span class="phone-icon" aria-hidden="true">📞</span>
+        <svg class="phone-icon" width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" fill="currentColor"/>
+        </svg>
         <span id="navPhoneNum">1844-1588</span>
       </a>
 
@@ -61,18 +69,57 @@
   <main>
 
     <!-- ══════════════════════════════
-         2. 히어로 슬라이더
+         모바일 전용 프로모션 배너
+         PC: display:none  /  모바일(≤768px): display:block
+    ══════════════════════════════ -->
+    <section class="mob-promo" id="mobPromo" aria-label="모바일 프로모션 배너">
+
+      <!-- 🖼️ 배너 이미지 교체: images/mobile/promo-banner.jpg
+           현재는 히어로 이미지를 임시 사용 — config.js mobBanner.image 로 관리 -->
+      <div class="mob-promo-visual">
+        <img
+          src="images/hero/main-hero-optimized.jpg"
+          alt="힐스테이트 수원파크포레 프로모션"
+          class="mob-promo-img"
+          id="mobBannerImg"
+        />
+        <div class="mob-promo-overlay" aria-hidden="true"></div>
+      </div>
+
+      <!-- 클릭 가능 CTA 버튼 -->
+      <div class="mob-promo-cta">
+        <a class="mob-cta-btn mob-cta-call" id="mobCallBtn" href="tel:18441588" aria-label="전화 상담">
+          <svg class="mob-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.8 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l1.13-1.13a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <span class="mob-cta-text">
+            <span class="mob-cta-sub">문의</span>
+            <strong class="mob-cta-num" id="mobCallPhone">1844-1588</strong>
+          </span>
+        </a>
+        <a class="mob-cta-btn mob-cta-visit" href="#visit" aria-label="방문예약">
+          <svg class="mob-cta-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+          <span class="mob-cta-label">방문예약</span>
+        </a>
+      </div>
+
+    </section>
+
+    <!-- ══════════════════════════════
+         2. 히어로 슬라이더 (PC 전용)
     ══════════════════════════════ -->
     <section class="hero" id="hero" aria-label="메인 히어로">
 
-      <!-- 슬라이더 트랙 -->
       <div class="hero-slider-outer">
-        <div class="hero-slider-track" id="heroTrack">
-          <!-- JS가 채움 -->
-        </div>
+        <div class="hero-slider-track" id="heroTrack"></div>
       </div>
 
-      <!-- 텍스트 콘텐츠 (슬라이드 위에 고정) -->
+      <!-- 텍스트 콘텐츠 -->
       <div class="hero-body">
         <div class="hero-content container">
           <p class="hero-sub" id="heroSub">서브 카피</p>
@@ -80,19 +127,161 @@
         </div>
       </div>
 
-      <!-- 하단 배지 + 혜택 버튼 그룹 -->
+      <!-- 하단 배지 + 혜택 버튼 -->
       <div class="hero-bottom-strip">
-        <span class="hero-badge" id="heroBadge">특별혜택</span>
+        <span class="hero-badge" id="heroBadge">선착순 분양중 · 상담 가능</span>
         <div class="hero-cta" id="heroCta"></div>
       </div>
 
-      <!-- 화살표 -->
       <button class="hero-arrow hero-prev" id="heroPrev" aria-label="이전 슬라이드">&#10094;</button>
       <button class="hero-arrow hero-next" id="heroNext" aria-label="다음 슬라이드">&#10095;</button>
-
-      <!-- 도트 -->
       <div class="hero-dots" id="heroDots" role="tablist" aria-label="슬라이드 선택"></div>
 
+    </section>
+
+    <!-- ══════════════════════════════
+         히어로 하단 관심고객 등록 (복제)
+    ══════════════════════════════ -->
+    <section class="register register-hero" id="register-hero">
+      <div class="container">
+        <div class="reg-card-wrap">
+
+          <!-- ── 왼쪽: 안내 카드 ── -->
+          <div class="reg-info-col">
+            <p class="reg-info-q">자세한 내용이 궁금하신가요?</p>
+            <ul class="reg-info-list">
+              <li class="reg-info-item">
+                <span class="reg-info-icon" aria-hidden="true">☝️</span>
+                <div class="reg-info-text">
+                  <strong class="reg-info-title">선착순 분양중</strong>
+                  <p class="reg-info-desc">지금 등록하시면 우선 상담 및 특별 혜택을 드립니다</p>
+                </div>
+              </li>
+              <li class="reg-info-item">
+                <span class="reg-info-icon" aria-hidden="true">📋</span>
+                <div class="reg-info-text">
+                  <strong class="reg-info-title">방문예약 접수</strong>
+                  <p class="reg-info-desc">우측의 양식 작성 후 제출해 주세요</p>
+                </div>
+              </li>
+              <li class="reg-info-item">
+                <span class="reg-info-icon" aria-hidden="true">📍</span>
+                <div class="reg-info-text">
+                  <strong class="reg-info-title">사업지</strong>
+                  <p class="reg-info-desc">경기도 수원시 권선구 서둔동 일원</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- ── 오른쪽: 폼 카드 ── -->
+          <div class="reg-form-col">
+            <form
+              class="register-form"
+              id="registerFormHero"
+              action="https://formspree.io/f/mdaroned"
+              method="POST"
+              novalidate
+            >
+              <input type="hidden" name="_subject" value="관심고객 등록 (히어로)" />
+              <input type="hidden" name="phone" id="regPhoneCombinedHero" />
+              <input type="hidden" name="formType" value="interest-register-hero" />
+              <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hp-field" aria-hidden="true" />
+
+              <!-- 이름 -->
+              <div class="form-row">
+                <div class="form-group reg-group">
+                  <label for="regNameHero">* 성&thinsp;함</label>
+                  <input type="text" id="regNameHero" name="name"
+                         placeholder="홍길동" autocomplete="name" required />
+                </div>
+              </div>
+
+              <!-- 연락처 -->
+              <div class="form-row phone-row">
+                <div class="form-group reg-group phone-part">
+                  <label for="regPhone1Hero">* 연락처</label>
+                  <input type="text" id="regPhone1Hero" name="phone1"
+                         maxlength="3" placeholder="010" inputmode="numeric" required />
+                </div>
+                <span class="phone-sep reg-sep" aria-hidden="true">-</span>
+                <div class="form-group reg-group phone-part no-label">
+                  <input type="text" id="regPhone2Hero" name="phone2"
+                         maxlength="4" placeholder="1234" inputmode="numeric" required />
+                </div>
+                <span class="phone-sep reg-sep" aria-hidden="true">-</span>
+                <div class="form-group reg-group phone-part no-label">
+                  <input type="text" id="regPhone3Hero" name="phone3"
+                         maxlength="4" placeholder="5678" inputmode="numeric" required />
+                </div>
+              </div>
+
+              <!-- 약관 동의 -->
+              <div class="form-row terms-row reg-terms-row">
+                <label class="checkbox-label reg-checkbox">
+                  <input type="checkbox" id="regAgreeHero" name="agreeAll" />
+                  <span>개인정보 수집 및 이용 동의 <span class="required">(필수)</span></span>
+                </label>
+                <button type="button" class="terms-detail-btn reg-terms-btn" id="regTermsToggleHero"
+                        aria-expanded="false" aria-controls="regTermsBoxHero">
+                  보기
+                </button>
+              </div>
+              <div class="terms-box reg-terms-box" id="regTermsBoxHero" hidden>
+                <p>
+                  <strong>수집 항목:</strong> 성명, 연락처<br />
+                  <strong>수집 목적:</strong> 분양 상담 및 안내<br />
+                  <strong>보유 기간:</strong> 상담 종료 후 1년<br /><br />
+                  귀하는 개인정보 수집·이용에 동의하지 않을 권리가 있으며,
+                  동의 거부 시 상담 신청이 제한될 수 있습니다.
+                </p>
+              </div>
+
+              <button type="submit" class="btn btn-register-submit" id="registerSubmitBtnHero">관심고객 등록하기</button>
+              <p class="form-status register-form-status" id="registerStatusHero" aria-live="polite"></p>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         프리미엄 상단 문의 배너 (복제)
+    ══════════════════════════════ -->
+    <section class="inquiry-banner inquiry-banner-top" id="inquiry-banner-top" aria-label="문의 안내">
+
+      <div class="ib-deco" aria-hidden="true">
+        <span class="ib-deco-circle ib-deco-l"></span>
+        <span class="ib-deco-circle ib-deco-r"></span>
+        <span class="ib-deco-circle ib-deco-m"></span>
+      </div>
+
+      <div class="ib-body container">
+
+        <p class="ib-title">
+          <span class="ib-title-line" aria-hidden="true"></span>
+          <span class="ib-title-text">힐스테이트 수원파크포레</span>
+          <span class="ib-title-line" aria-hidden="true"></span>
+        </p>
+
+        <a class="ib-pill" id="ibCallBtn2" href="tel:18441588" aria-label="문의 전화">
+          <span class="ib-pill-glow" aria-hidden="true"></span>
+          <span class="ib-pill-label">상담문의</span>
+          <span class="ib-pill-divider" aria-hidden="true"></span>
+          <span class="ib-pill-num">1844-1588</span>
+        </a>
+
+        <div class="ib-ticker" aria-hidden="true">
+          <div class="ib-ticker-track">
+            <span class="ib-ticker-text">계약금 5프로 &nbsp;&nbsp;/&nbsp;&nbsp; 잔금유예(일부) + 특별혜택 + 추가혜택 &nbsp;&nbsp;/&nbsp;&nbsp; 선착순 3세대 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span class="ib-ticker-text">계약금 5프로 &nbsp;&nbsp;/&nbsp;&nbsp; 잔금유예(일부) + 특별혜택 + 추가혜택 &nbsp;&nbsp;/&nbsp;&nbsp; 선착순 3세대 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span class="ib-ticker-text">계약금 5프로 &nbsp;&nbsp;/&nbsp;&nbsp; 잔금유예(일부) + 특별혜택 + 추가혜택 &nbsp;&nbsp;/&nbsp;&nbsp; 선착순 3세대 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span class="ib-ticker-text">계약금 5프로 &nbsp;&nbsp;/&nbsp;&nbsp; 잔금유예(일부) + 특별혜택 + 추가혜택 &nbsp;&nbsp;/&nbsp;&nbsp; 선착순 3세대 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          </div>
+        </div>
+
+      </div>
     </section>
 
     <!-- ══════════════════════════════
@@ -142,13 +331,14 @@
     </section>
 
     <!-- ══════════════════════════════
-         5. 위치 안내
+         5. 위치 안내  ← 파워링크 앵커
     ══════════════════════════════ -->
     <section class="location" id="location">
       <div class="container">
         <div class="section-header">
           <span class="section-tag">Location</span>
           <h2 class="section-title">위치 안내</h2>
+          <p class="section-desc">탁월한 입지에서 시작되는 프리미엄 라이프</p>
         </div>
         <div class="location-layout">
           <div class="location-map">
@@ -184,15 +374,65 @@
     </section>
 
     <!-- ══════════════════════════════
-         7. 평면도
+         7. 문의 배너 (중간 전환 CTA)
     ══════════════════════════════ -->
-    <section class="floorplan" id="floorplan">
+    <section class="inquiry-banner" id="inquiry-banner" aria-label="문의 안내">
+
+      <!-- 배경 빛 장식 -->
+      <div class="ib-deco" aria-hidden="true">
+        <span class="ib-deco-circle ib-deco-l"></span>
+        <span class="ib-deco-circle ib-deco-r"></span>
+        <span class="ib-deco-circle ib-deco-m"></span>
+      </div>
+
+      <div class="ib-body container">
+
+        <!-- 상단 제목 -->
+        <p class="ib-title">
+          <span class="ib-title-line" aria-hidden="true"></span>
+          <span class="ib-title-text">힐스테이트 수원파크포레</span>
+          <span class="ib-title-line" aria-hidden="true"></span>
+        </p>
+
+        <!-- 메인 문의 Pill -->
+        <a class="ib-pill" id="ibCallBtn" href="tel:18441588" aria-label="문의 전화">
+          <!-- 내부 광택 레이어 -->
+          <span class="ib-pill-glow" aria-hidden="true"></span>
+
+          <!-- 왼쪽: 라벨 -->
+          <span class="ib-pill-label">상담문의</span>
+
+          <!-- 구분자 -->
+          <span class="ib-pill-divider" aria-hidden="true"></span>
+
+          <!-- 오른쪽: 번호/메인문구 -->
+          <span class="ib-pill-num">1844-1588</span>
+        </a>
+
+        <!-- 하단 티커 -->
+        <div class="ib-ticker" aria-hidden="true">
+          <div class="ib-ticker-track">
+            <span class="ib-ticker-text">계약금 5프로 &nbsp;&nbsp;/&nbsp;&nbsp; 잔금유예(일부) + 특별혜택 + 추가혜택 &nbsp;&nbsp;/&nbsp;&nbsp; 선착순 3세대 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span class="ib-ticker-text">계약금 5프로 &nbsp;&nbsp;/&nbsp;&nbsp; 잔금유예(일부) + 특별혜택 + 추가혜택 &nbsp;&nbsp;/&nbsp;&nbsp; 선착순 3세대 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span class="ib-ticker-text">계약금 5프로 &nbsp;&nbsp;/&nbsp;&nbsp; 잔금유예(일부) + 특별혜택 + 추가혜택 &nbsp;&nbsp;/&nbsp;&nbsp; 선착순 3세대 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <span class="ib-ticker-text">계약금 5프로 &nbsp;&nbsp;/&nbsp;&nbsp; 잔금유예(일부) + 특별혜택 + 추가혜택 &nbsp;&nbsp;/&nbsp;&nbsp; 선착순 3세대 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         8. 타입 소개 (평면도)  ← 파워링크 앵커
+    ══════════════════════════════ -->
+    <section class="floorplan" id="types">
       <div class="container">
         <div class="section-header">
-          <span class="section-tag">Floor Plan</span>
-          <h2 class="section-title">평면도</h2>
+          <span class="section-tag">Unit Types</span>
+          <h2 class="section-title">타입 소개</h2>
+          <p class="section-desc">내 가족에게 꼭 맞는 공간을 선택하세요</p>
         </div>
-        <div class="tab-bar light" id="floorplanTabBar" role="tablist" aria-label="평면도 타입 선택">
+        <div class="tab-bar light" id="floorplanTabBar" role="tablist" aria-label="타입 선택">
           <!-- JS가 채움 -->
         </div>
         <div class="floorplan-content" id="floorplanContent">
@@ -202,7 +442,65 @@
     </section>
 
     <!-- ══════════════════════════════
-         8. FAQ
+         8. 미디어 / 뉴스
+    ══════════════════════════════ -->
+    <section class="media" id="media">
+      <div class="container">
+
+        <!-- 섹션 헤더 -->
+        <div class="media-section-header">
+          <p class="media-breadcrumb">
+            <span class="media-bc-main">MEDIA</span>
+            <span class="media-bc-sep">›</span>
+            <span class="media-bc-sub">NEWS</span>
+          </p>
+          <hr class="media-rule" />
+        </div>
+
+        <!-- 뉴스 카드 2개 (고정) -->
+        <div class="media-list">
+
+          <!-- 카드 1 -->
+          <article class="media-card">
+            <h3 class="media-card-title">수원 권선구 서둔동 대규모 신규 분양… 힐스테이트 수원 파크포레 주목</h3>
+            <blockquote class="media-card-summary">
+              <p>국내 대형 건설사의 수원 권선구 신규 분양으로 지역 주거 시장 활기</p>
+              <p>주변 개발 호재와 맞물려 수요자들의 높은 관심 집중</p>
+            </blockquote>
+            <div class="media-card-body">
+              <p>수원시 권선구 서둔동 일원에 들어서는 힐스테이트 수원 파크포레가 지역 분양 시장에서 주목을 받고 있다. 지하 2층~지상 14층, 총 10개 동, 482세대로 구성되며 서호공원·여기산공원 등 풍부한 자연환경을 배후에 둔 쾌적한 주거 환경이 강점으로 꼽힌다.</p>
+              <p>수원역(1·수인분당선)과 화서역(1호선), 향후 GTX-C 노선 연장 호재까지 더해져 광역 교통망 이용이 한층 편리해질 것으로 기대된다. 분양 관계자는 "희소한 수원 서부권 신규 공급인 만큼 관심 고객 선점이 중요하다"고 강조했다.</p>
+            </div>
+            <div class="media-card-footer">
+              <span class="media-card-source">보도자료</span>
+              <button class="media-more-btn" aria-expanded="false">더 보기</button>
+            </div>
+          </article>
+
+          <!-- 카드 2 -->
+          <article class="media-card">
+            <h3 class="media-card-title">서호지구·GTX-C 개발 호재에 수원 서부권 주거 가치 상승 전망</h3>
+            <blockquote class="media-card-summary">
+              <p>서호 자연환경 인접과 광역 교통망 확충으로 중장기 미래가치 주목</p>
+              <p>스타필드 수원·AK플라자 등 인프라 집약된 프리미엄 생활권 형성</p>
+            </blockquote>
+            <div class="media-card-body">
+              <p>수원시 권선구 일대가 서호지구 개발 계획과 수원역 GTX-C 연장 호재를 기반으로 중장기 주거 가치 상승이 기대되고 있다. 전문가들은 "분양가 인상 전 현 조건이 실수요자에게 유리한 시점"이라고 입을 모으고 있다.</p>
+              <p>인근에는 스타필드 수원, AK플라자, 이마트, 롯데마트 등 대형 쇼핑 인프라가 집약돼 있어 생활 편의성도 높다. 서호공원·여기산공원과 인접한 쾌적한 자연환경도 수요자들의 선택을 이끄는 핵심 요소로 분석된다.</p>
+            </div>
+            <div class="media-card-footer">
+              <span class="media-card-source">보도자료</span>
+              <button class="media-more-btn" aria-expanded="false">더 보기</button>
+            </div>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         9. FAQ
     ══════════════════════════════ -->
     <section class="faq" id="faq">
       <div class="container">
@@ -217,14 +515,162 @@
     </section>
 
     <!-- ══════════════════════════════
-         9. 상담 신청
+         9. 관심고객 등록  ← 파워링크 앵커 (신규)
     ══════════════════════════════ -->
-    <section class="contact" id="contact">
+    <section class="register" id="register">
+      <div class="container">
+        <div class="reg-card-wrap">
+
+          <!-- ── 왼쪽: 안내 카드 ── -->
+          <div class="reg-info-col">
+            <p class="reg-info-q">자세한 내용이 궁금하신가요?</p>
+            <ul class="reg-info-list">
+              <li class="reg-info-item">
+                <span class="reg-info-icon" aria-hidden="true">☝️</span>
+                <div class="reg-info-text">
+                  <strong class="reg-info-title">선착순 분양중</strong>
+                  <p class="reg-info-desc">지금 등록하시면 우선 상담 및 특별 혜택을 드립니다</p>
+                </div>
+              </li>
+              <li class="reg-info-item">
+                <span class="reg-info-icon" aria-hidden="true">📋</span>
+                <div class="reg-info-text">
+                  <strong class="reg-info-title">방문예약 접수</strong>
+                  <p class="reg-info-desc">우측의 양식 작성 후 제출해 주세요</p>
+                </div>
+              </li>
+              <li class="reg-info-item">
+                <span class="reg-info-icon" aria-hidden="true">📍</span>
+                <div class="reg-info-text">
+                  <strong class="reg-info-title">사업지</strong>
+                  <p class="reg-info-desc">경기도 수원시 권선구 서둔동 일원</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- ── 오른쪽: 폼 카드 ── -->
+          <div class="reg-form-col">
+            <form
+              class="register-form"
+              id="registerForm"
+              action="https://formspree.io/f/mdaroned"
+              method="POST"
+              novalidate
+            >
+              <input type="hidden" name="_subject" value="관심고객 등록" />
+              <input type="hidden" name="phone" id="regPhoneCombined" />
+              <input type="hidden" name="formType" value="interest-register" />
+              <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hp-field" aria-hidden="true" />
+
+              <!-- 이름 -->
+              <div class="form-row">
+                <div class="form-group reg-group">
+                  <label for="regName">* 성&thinsp;함</label>
+                  <input type="text" id="regName" name="name"
+                         placeholder="홍길동" autocomplete="name" required />
+                </div>
+              </div>
+
+              <!-- 연락처 -->
+              <div class="form-row phone-row">
+                <div class="form-group reg-group phone-part">
+                  <label for="regPhone1">* 연락처</label>
+                  <input type="text" id="regPhone1" name="phone1"
+                         maxlength="3" placeholder="010" inputmode="numeric" required />
+                </div>
+                <span class="phone-sep reg-sep" aria-hidden="true">-</span>
+                <div class="form-group reg-group phone-part no-label">
+                  <input type="text" id="regPhone2" name="phone2"
+                         maxlength="4" placeholder="1234" inputmode="numeric" required />
+                </div>
+                <span class="phone-sep reg-sep" aria-hidden="true">-</span>
+                <div class="form-group reg-group phone-part no-label">
+                  <input type="text" id="regPhone3" name="phone3"
+                         maxlength="4" placeholder="5678" inputmode="numeric" required />
+                </div>
+              </div>
+
+              <!-- 약관 동의 -->
+              <div class="form-row terms-row reg-terms-row">
+                <label class="checkbox-label reg-checkbox">
+                  <input type="checkbox" id="regAgree" name="agreeAll" />
+                  <span>개인정보 수집 및 이용 동의 <span class="required">(필수)</span></span>
+                </label>
+                <button type="button" class="terms-detail-btn reg-terms-btn" id="regTermsToggle"
+                        aria-expanded="false" aria-controls="regTermsBox">
+                  보기
+                </button>
+              </div>
+              <div class="terms-box reg-terms-box" id="regTermsBox" hidden>
+                <p>
+                  <strong>수집 항목:</strong> 성명, 연락처<br />
+                  <strong>수집 목적:</strong> 분양 상담 및 안내<br />
+                  <strong>보유 기간:</strong> 상담 종료 후 1년<br /><br />
+                  귀하는 개인정보 수집·이용에 동의하지 않을 권리가 있으며,
+                  동의 거부 시 상담 신청이 제한될 수 있습니다.
+                </p>
+              </div>
+
+              <button type="submit" class="btn btn-register-submit" id="registerSubmitBtn">관심고객 등록하기</button>
+              <p class="form-status register-form-status" id="registerStatus" aria-live="polite"></p>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         10. 예약방문고객 특별혜택
+    ══════════════════════════════ -->
+    <section class="visit-gift-section" id="visit-gift">
       <div class="container">
         <div class="section-header">
-          <span class="section-tag">Contact</span>
-          <h2 class="section-title">상담 신청</h2>
-          <p class="section-desc">전문 상담사가 빠르게 연락드립니다</p>
+          <span class="section-tag">Special Gift</span>
+          <h2 class="section-title">예약방문고객 특별혜택</h2>
+        </div>
+
+        <div class="vg-copy">
+          <div class="vg-copy-row">
+            <span class="vg-label">대상</span>
+            <span class="vg-divider"></span>
+            <span class="vg-text">예약 후 방문해주신 고객</span>
+          </div>
+          <div class="vg-copy-row vg-copy-row--accent">
+            <span class="vg-text">상담고객 전원 <em class="vg-point">제주여행 상품권</em> 증정
+              <span class="vg-note">(유류세 별도)</span>
+            </span>
+          </div>
+          <div class="vg-copy-row">
+            <span class="vg-label">혜택</span>
+            <span class="vg-divider"></span>
+            <span class="vg-text"><em class="vg-point">신세계상품권 2만원</em> 증정
+              <span class="vg-note-blue">(선착순 <em class="vg-point">30명</em>)</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="vg-img-wrap">
+          <img
+            src="images/visit-gift/gift.png"
+            alt="예약방문고객 특별혜택 선물 이미지"
+            class="vg-img"
+            loading="lazy"
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════
+         11. 방문 예약  ← 파워링크 앵커
+    ══════════════════════════════ -->
+    <section class="contact" id="visit">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Reservation</span>
+          <h2 class="section-title">방문 예약</h2>
+          <p class="section-desc">모델하우스 방문 예약 후 전문 상담사가 직접 안내해 드립니다</p>
         </div>
 
         <form
@@ -234,7 +680,7 @@
           method="POST"
           novalidate
         >
-          <input type="hidden" name="_subject" value="랜딩페이지 상담 신청" />
+          <input type="hidden" name="_subject" value="방문 예약 신청" />
           <input type="hidden" name="phone" id="phoneCombined" />
           <input type="hidden" name="privacyConsent" id="privacyConsent" value="agreed" />
           <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hp-field" aria-hidden="true" />
@@ -318,7 +764,7 @@
             </p>
           </div>
 
-          <button type="submit" class="btn btn-primary btn-submit" id="contactSubmitBtn">상담 신청하기</button>
+          <button type="submit" class="btn btn-primary btn-submit" id="contactSubmitBtn">방문예약 신청하기</button>
           <p class="form-status" id="formStatus" aria-live="polite"></p>
         </form>
       </div>
@@ -327,51 +773,168 @@
   </main>
 
   <!-- ══════════════════════════════
-       10. 하단 고정 버튼바
+       11. 하단 고정 버튼바
   ══════════════════════════════ -->
+  <!-- 모바일 전용 프로모션 스트립 (하단 바 바로 위, 스크롤 100px 이후 표시) -->
+  <div class="mob-promo-strip" id="mobPromoStrip" aria-label="프로모션 안내">
+    <p class="mob-strip-headline">실물을 <span class="blink-red">직접 보고</span> 분양 <span class="blink-gold">결정하세요</span>!</p>
+    <p class="mob-strip-benef">계약금 <span class="blink-blue bd1">5프로</span> · 대출 <span class="blink-blue bd2">70%</span> · 입주 <span class="blink-blue bd3">축하금</span> · 잔금유예(일부) · 특별혜택 · 추가혜택</p>
+    <p class="mob-strip-disc">* 대출 한도는 개인별 요건에 따라 상이할 수 있습니다.</p>
+  </div>
+
   <div class="bottom-bar" id="bottomBar" role="complementary" aria-label="하단 빠른 메뉴">
-    <a class="bottom-bar-btn call" id="bottomCallBtn" href="tel:">
-      <span class="icon" aria-hidden="true">📞</span>
-      <span id="bottomCallLabel">전화 상담</span>
+    <!-- 왼쪽: 전화 상담 -->
+    <a class="bottom-bar-btn bb-call" id="bottomCallBtn" href="tel:" aria-label="전화 상담">
+      <svg class="bb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.8 1.2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l1.13-1.13a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+      </svg>
+      <span class="bb-text">
+        <span class="bb-sub">문의</span>
+        <span class="bb-num" id="bottomCallPhone">1844-1588</span>
+      </span>
     </a>
-    <a class="bottom-bar-btn visit" href="#contact">
-      <span class="icon" aria-hidden="true">📅</span>
-      <span id="bottomVisitLabel">방문 예약</span>
+    <!-- 오른쪽: 방문예약 -->
+    <a class="bottom-bar-btn bb-visit" href="#visit" aria-label="방문예약">
+      <svg class="bb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+        <line x1="16" y1="2" x2="16" y2="6"/>
+        <line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+      <span class="bb-text bb-visit-text">방문예약</span>
     </a>
   </div>
 
   <!-- ══════════════════════════════
-       11. 플로팅 사이드 버튼
+       12. 우측 고정 퀵 배너
   ══════════════════════════════ -->
-  <div class="floating-side" id="floatingSide" aria-label="플로팅 메뉴">
-    <a class="floating-btn call" id="floatCallBtn" href="tel:" title="전화 상담" aria-label="전화 상담">
-      <span aria-hidden="true">📞</span>
+  <div class="quick-side" id="floatingSide" aria-label="퀵 메뉴">
+
+    <!-- 브랜드 헤더 -->
+    <div class="qs-brand">
+      <span class="qs-brand-mark" id="qsBrandMark">H</span>
+      <p class="qs-brand-name" id="qsBrandName">힐스테이트<br>수원파크포레</p>
+    </div>
+
+    <!-- 방문예약 -->
+    <a class="qs-item" href="#visit" title="방문예약">
+      <svg class="qs-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+      <span class="qs-label">방문예약</span>
     </a>
-    <a class="floating-btn kakao" href="#contact" title="카카오 상담" aria-label="카카오 상담">
-      <span aria-hidden="true">💬</span>
+
+    <!-- 관심고객등록 -->
+    <a class="qs-item" href="#register" title="관심고객등록">
+      <svg class="qs-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+      </svg>
+      <span class="qs-label">관심고객<br>등록</span>
     </a>
-    <a class="floating-btn top" href="#hero" title="맨 위로" aria-label="맨 위로 이동">
-      <span aria-hidden="true">▲</span>
+
+    <!-- 전화상담 -->
+    <a class="qs-item qs-call" id="floatCallBtn" href="tel:" title="전화상담">
+      <svg class="qs-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2h3a2 2 0 0 1 2 1.72c.12.96.34 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.36 1.85.58 2.81.7A2 2 0 0 1 22 16.92z"/>
+      </svg>
+      <span class="qs-label">전화상담</span>
     </a>
+
+    <!-- 구분선 -->
+    <div class="qs-divider" aria-hidden="true"></div>
+
+    <!-- TOP -->
+    <a class="qs-item qs-top" href="#hero" title="맨 위로">
+      <svg class="qs-icon qs-top-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="18 15 12 9 6 15"/>
+      </svg>
+      <span class="qs-label">TOP</span>
+    </a>
+
   </div>
 
   <!-- ══════════════════════════════
-       12. 푸터
+       13. 푸터
   ══════════════════════════════ -->
   <footer class="footer" id="footer">
     <div class="container">
-      <div class="footer-inner">
-        <p class="footer-logo" id="footerLogoName"></p>
-        <p class="footer-info" id="footerInfo"></p>
-        <hr class="footer-hr" />
-        <p class="footer-disclaimer" id="footerDisclaimer"></p>
+      <div class="footer-grid">
+
+        <!-- 좌: 정보 행 -->
+        <div class="footer-info-col">
+          <p class="footer-project-name">힐스테이트 수원 파크포레</p>
+          <div class="footer-rows">
+
+            <div class="footer-row">
+              <svg class="fr-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5a1 1 0 011-1h2.3l1 2.5-1.4 1.4a11 11 0 004.7 4.7l1.4-1.4 2.5 1V14a1 1 0 01-1 1C6.5 15 2.5 9.5 2.5 4.5z"/></svg>
+              <span class="fr-label">분양문의</span>
+              <span class="fr-pipe">|</span>
+              <a class="fr-val fr-val--strong" href="tel:18441588">1844-1588</a>
+            </div>
+
+            <div class="footer-row">
+              <svg class="fr-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="7" r="3"/><path d="M4 17c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+              <span class="fr-label">관리자</span>
+              <span class="fr-pipe">|</span>
+              <span class="fr-val">이도연</span>
+            </div>
+
+            <div class="footer-row">
+              <svg class="fr-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="14" height="10" rx="1"/><path d="M7 7V5a3 3 0 016 0v2"/><line x1="10" y1="11" x2="10" y2="14"/></svg>
+              <span class="fr-label">현장명</span>
+              <span class="fr-pipe">|</span>
+              <span class="fr-val">힐스테이트 수원 파크포레</span>
+            </div>
+
+            <div class="footer-row">
+              <svg class="fr-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="16" height="11" rx="2"/><path d="M2 8l8 5 8-5"/></svg>
+              <span class="fr-label">이메일</span>
+              <span class="fr-pipe">|</span>
+              <a class="fr-val" href="mailto:intothefuture2026@gmail.com">intothefuture2026@gmail.com</a>
+            </div>
+
+            <div class="footer-row">
+              <svg class="fr-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="10,2 12.9,7.6 19,8.5 14.5,12.9 15.6,19 10,16 4.4,19 5.5,12.9 1,8.5 7.1,7.6"/></svg>
+              <span class="fr-label">시공사</span>
+              <span class="fr-pipe">|</span>
+              <span class="fr-val">현대엔지니어링</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 우: 메뉴 -->
+        <div class="footer-nav-col">
+          <p class="footer-nav-title">Contents</p>
+          <ul class="footer-nav-list">
+            <li><a href="#">Home</a></li>
+            <li><a href="#overview">단지개요</a></li>
+            <li><a href="#location">위치안내</a></li>
+            <li><a href="#gallery">갤러리</a></li>
+            <li><a href="#types">타입소개</a></li>
+            <li><a href="#media">미디어</a></li>
+            <li><a href="#register">관심등록</a></li>
+            <li><a href="#visit">방문예약</a></li>
+          </ul>
+        </div>
+
+      </div><!-- /footer-grid -->
+
+      <hr class="footer-hr">
+
+      <div class="footer-bottom">
+        <p class="footer-disclaimer">
+          ※ 본 홈페이지의 이미지, CG, 투시도 등은 소비자의 이해를 돕기 위한 것으로 실제와 다를 수 있습니다.<br>
+          ※ 분양과 관련한 자세한 사항은 반드시 입주자 모집공고를 확인하시기 바랍니다.
+        </p>
         <p class="footer-copy">© 2026 All Rights Reserved.</p>
       </div>
+
     </div>
   </footer>
 
   <!-- ══════════════════════════════
-       13. 혜택 안내 팝업
+       14. 혜택 안내 팝업
   ══════════════════════════════ -->
   <div class="popup-overlay hidden" id="popupOverlay">
     <div class="popup-box">

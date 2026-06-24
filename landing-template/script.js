@@ -1,4 +1,4 @@
-﻿// script.js  ?? 遺꾩뼇 ?쒕뵫?섏씠吏 ?명꽣?숈뀡
+// script.js
 
 document.addEventListener('DOMContentLoaded', () => {
   applyConfig();
@@ -8,65 +8,68 @@ document.addEventListener('DOMContentLoaded', () => {
   initFAQ();
   initContactForm();
   initTermsToggle();
+  initRegisterForm();
+  initRegisterTermsToggle();
+  initRegisterFormHero();
+  initRegisterTermsToggleHero();
+  initMedia();
   initScrollEffects();
+  initNavActiveSection();
   initPopup();
 });
 
-/* ??????????????????????????????????????????
-   Config ??DOM 諛붿씤???????????????????????????????????????????? */
+/* ──────────────────────────────────────────
+   Config → DOM 연결
+────────────────────────────────────────── */
 function applyConfig() {
   const C = CONFIG;
   const phone = C.phone;
   const telHref = 'tel:' + phone.replace(/-/g, '');
 
-  // ?섏씠吏 ??댄?
   document.title = C.propertyName + ' 분양안내';
 
-  // ?ㅻ퉬 濡쒓퀬
   el('navLogo').textContent = C.propertyName;
 
-  // ?꾪솕踰덊샇 ?쇨큵
-  el('navPhoneNum').textContent   = phone;
+  el('navPhoneNum').textContent    = phone;
   el('mobilePhoneNum').textContent = phone;
   setHref('navPhoneBtn', telHref);
   setHref('mobilePhoneBtn', telHref);
   setHref('bottomCallBtn', telHref);
   setHref('floatCallBtn', telHref);
+  setHref('ibCallBtn', telHref);
+  setHref('ibCallBtn2', telHref);
 
-  // ?ㅻ퉬 硫붾돱 (PC + 紐⑤컮??
   buildNavMenu();
 
-  el('heroBadge').textContent = '선착순 특별혜택 제공';
+  el('heroBadge').textContent = '선착순 분양중 · 상담 가능';
   el('heroTitle').innerHTML = '힐스테이트 <span class="hero-title-gold">수원파크포레</span>,만의 <span class="hero-title-dark">특별한 계약조건!</span>';
   el('heroSub').textContent = '수원의 중심에서,';
 
-  // ?덉뼱濡??쒗깮 踰꾪듉
   buildHeroBenefitBtns();
 
-  // ?섎떒 踰꾪듉
-  el('bottomCallLabel').textContent  = C.bottomBar.callLabel;
-  el('bottomVisitLabel').textContent = C.bottomBar.visitLabel;
+  el('bottomCallPhone').textContent = phone;
 
-  // ?뚮줈??移댁뭅??踰꾪듉
-  const kakaoBtn = document.querySelector('.floating-btn.kakao');
-  if (kakaoBtn && C.kakaoUrl) {
-    kakaoBtn.href   = C.kakaoUrl;
-    kakaoBtn.target = '_blank';
-    kakaoBtn.rel    = 'noopener noreferrer';
+  // 모바일 전용 배너 CTA + 이미지
+  setHref('mobCallBtn', telHref);
+  el('mobCallPhone').textContent = phone;
+  const mobImg = el('mobBannerImg');
+  if (mobImg && C.mobBanner?.image) mobImg.src = C.mobBanner.image;
+
+  // 퀵배너 브랜드명 분할 출력
+  const qsBrandName = el('qsBrandName');
+  if (qsBrandName) {
+    const parts = C.propertyName.split(' ');
+    qsBrandName.innerHTML = parts[0] + '<br>' + parts.slice(1).join(' ');
   }
 
-  // ?명꽣
-  el('footerLogoName').textContent    = C.propertyName;
-  el('footerInfo').textContent        = '대표번호 ' + phone;
-  el('footerDisclaimer').textContent  = C.footer.disclaimer;
+  // 푸터는 정적 HTML로 직접 작성됨
 }
 
 function buildNavMenu() {
-  const C = CONFIG;
   const navList    = el('navList');
   const mobileList = el('mobileNavList');
 
-  C.navMenu.forEach(item => {
+  CONFIG.navMenu.forEach(item => {
     const li = document.createElement('li');
     const a  = document.createElement('a');
     a.href        = item.href;
@@ -85,28 +88,58 @@ function buildHeroBenefitBtns() {
   if (!cta) return;
   cta.innerHTML = '';
   [
-    {
-      label: 'SPECIAL 1',
-      value: '발코니 무상지원',
-    },
-    {
-      label: 'SPECIAL 2',
-      value: '잔금유예 1~2억',
-    },
-    {
-      label: 'HIDDEN SPECIAL',
-      value: '+ α 계약자혜택 제공',
-    },
-  ].forEach(benefit => {
+    '발코니 무상지원',
+    '잔금유예 1~2억',
+    '+ α 계약자혜택 제공',
+  ].forEach(value => {
     const a = document.createElement('a');
-    a.href = '#contact';
+    a.href = '#visit';
     a.className = 'hero-benefit-btn';
-    const valueHtml = benefit.value.replace(/\n/g, '<br>');
-    a.innerHTML = `<span class="benefit-label">${benefit.label}</span><span class="benefit-value">${valueHtml}</span>`;
+    a.innerHTML = `<span class="benefit-value">${value.replace(/\n/g, '<br>')}</span>`;
     cta.appendChild(a);
   });
 }
 
+/* ──────────────────────────────────────────
+   네비게이션
+────────────────────────────────────────── */
+function initNav() {
+  const hamburger  = el('hamburger');
+  const mobileMenu = el('mobileMenu');
+
+  const topBtn = el('navTopBtn');
+  if (topBtn) topBtn.addEventListener('click', () => window.scrollTo(0, 0));
+
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.contains('open') ? closeMobileMenu() : openMobileMenu();
+  });
+
+  document.addEventListener('click', e => {
+    if (!el('navHeader').contains(e.target)) closeMobileMenu();
+  });
+}
+
+function openMobileMenu() {
+  el('mobileMenu').classList.add('open');
+  el('mobileMenu').setAttribute('aria-hidden', 'false');
+  const ham = el('hamburger');
+  ham.classList.add('active');
+  ham.setAttribute('aria-label', '메뉴 닫기');
+  ham.setAttribute('aria-expanded', 'true');
+}
+
+function closeMobileMenu() {
+  el('mobileMenu').classList.remove('open');
+  el('mobileMenu').setAttribute('aria-hidden', 'true');
+  const ham = el('hamburger');
+  ham.classList.remove('active');
+  ham.setAttribute('aria-label', '메뉴 열기');
+  ham.setAttribute('aria-expanded', 'false');
+}
+
+/* ──────────────────────────────────────────
+   프리미엄 포인트
+────────────────────────────────────────── */
 function buildPremiumCards() {
   const grid = el('premiumGrid');
   if (!grid || grid.dataset.ready === 'true') return;
@@ -114,7 +147,7 @@ function buildPremiumCards() {
   const premiumPoints = [
     {
       title: '입지환경 | 양호',
-      desc: '동측 공원 및 복측 구운지구, 서호지구 개발로 입지 우상향',
+      desc: '동측 공원 및 북측 구운지구, 서호지구 개발로 입지 우상향',
       image: 'images/premium/point01-optimized.jpg',
       video: '',
     },
@@ -171,6 +204,36 @@ function buildPremiumCards() {
   grid.dataset.ready = 'true';
 }
 
+/* ──────────────────────────────────────────
+   단지 개요
+────────────────────────────────────────── */
+function buildOverviewCard() {
+  const img = el('overviewImg');
+  if (img) {
+    img.src          = 'images/overview/overview-optimized.jpg';
+    img.loading      = 'lazy';
+    img.decoding     = 'async';
+    img.fetchPriority = 'low';
+  }
+  el('overviewCaption').textContent = '';
+
+  const tbody = el('overviewTbody');
+  [
+    { label: '위치',          value: '경기도 수원시 권선구 서둔동 213-10번지 일원' },
+    { label: '규모',          value: '지하 2층 / 지상 14층, 10개동 총 482세대, 최고높이 40.54M' },
+    { label: '대지면적',      value: '30,621.0000㎡ (9,262.8525평)' },
+    { label: '건폐율/용적률', value: '24.28% / 199.87%' },
+    { label: '주차대수',      value: '지하 696대 (세대당 1.44대, 근생 2대 포함)' },
+  ].forEach(row => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="ov-label">${row.label}</td><td class="ov-value">${row.value}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ──────────────────────────────────────────
+   위치 안내
+────────────────────────────────────────── */
 function buildLocationPoints() {
   const wrap = el('locationPoints');
   if (!wrap || wrap.dataset.ready === 'true') return;
@@ -205,7 +268,7 @@ function buildLocationPoints() {
       items: [
         '대형마트, 백화점 및 복합쇼핑몰 인근 위치로 생활인프라 풍부',
         '수원역 일대 AK플라자, 롯데백화점 및 로데오거리 위치로 상권 풍부',
-        "홈플러스, 이마트, 롯데마트 등 대형마트 및 스타필드('24.1월 오픈) 이용 편리",
+        "스타필드('24.1월 오픈), 홈플러스, 이마트, 롯데마트 등 이용 편리",
       ],
     },
   ].forEach(pt => {
@@ -225,109 +288,16 @@ function buildLocationPoints() {
 function initLocationSection() {
   const mapImg = qs('.location-map-img');
   if (mapImg && !mapImg.getAttribute('src')) {
-    mapImg.src = mapImg.dataset.src || '';
-    mapImg.loading = 'lazy';
+    mapImg.src      = mapImg.dataset.src || '';
+    mapImg.loading  = 'lazy';
     mapImg.decoding = 'async';
   }
   buildLocationPoints();
 }
 
-/* ??????????????????????????????????????????
-   ?ㅻ퉬寃뚯씠???????????????????????????????????????????? */
-function initNav() {
-  const hamburger  = el('hamburger');
-  const mobileMenu = el('mobileMenu');
-
-  hamburger.addEventListener('click', () => {
-    const isOpen = mobileMenu.classList.contains('open');
-    isOpen ? closeMobileMenu() : openMobileMenu();
-  });
-
-  // 紐⑤컮??硫붾돱 ?몃? ?대┃ ???リ린
-  document.addEventListener('click', e => {
-    if (!el('navHeader').contains(e.target)) closeMobileMenu();
-  });
-}
-
-function openMobileMenu() {
-  el('mobileMenu').classList.add('open');
-  el('mobileMenu').setAttribute('aria-hidden', 'false');
-  const ham = el('hamburger');
-  ham.classList.add('active');
-  ham.setAttribute('aria-label', '硫붾돱 ?リ린');
-  ham.setAttribute('aria-expanded', 'true');
-}
-
-function closeMobileMenu() {
-  el('mobileMenu').classList.remove('open');
-  el('mobileMenu').setAttribute('aria-hidden', 'true');
-  const ham = el('hamburger');
-  ham.classList.remove('active');
-  ham.setAttribute('aria-label', '硫붾돱 ?닿린');
-  ham.setAttribute('aria-expanded', 'false');
-}
-
-/* ??????????????????????????????????????????
-   ?⑥? 媛쒖슂 ???대?吏 + ???????????????????????????????????????????? */
-function buildOverviewCard() {
-  const img = el('overviewImg');
-  if (img) {
-    img.src = 'images/overview/overview-optimized.jpg';
-    img.loading = 'lazy';
-    img.decoding = 'async';
-    img.fetchPriority = 'low';
-  }
-  el('overviewCaption').textContent = '';
-
-  const tbody = el('overviewTbody');
-  [
-    { label: '위치', value: '경기도 수원시 권선구 서둔동 213-10번지 일원' },
-    { label: '규모', value: '지하 2층 / 지상 14층, 10개동 총 482세대, 최고높이 40.54M' },
-    { label: '대지면적', value: '30,621.0000㎡ (9,262.8525평)' },
-    { label: '건폐율/용적률', value: '24.28% / 199.87%' },
-    { label: '주차대수', value: '지하 696대 (세대당 1.44대, 근생 2대 포함)' },
-  ].forEach(row => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td class="ov-label">${row.label}</td><td class="ov-value">${row.value}</td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-function initDeferredSections() {
-  const tasks = [
-    { id: 'premium', run: buildPremiumCards, done: false },
-    { id: 'overview', run: buildOverviewCard, done: false },
-    { id: 'location', run: initLocationSection, done: false },
-    { id: 'gallery', run: initGallery, done: false },
-    { id: 'floorplan', run: initFloorplan, done: false },
-  ];
-
-  if (!('IntersectionObserver' in window)) {
-    tasks.forEach(task => task.run());
-    return;
-  }
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const task = tasks.find(item => item.id === entry.target.id);
-      if (!task || task.done) return;
-      task.done = true;
-      task.run();
-      observer.unobserve(entry.target);
-    });
-  }, {
-    rootMargin: window.matchMedia('(max-width: 768px)').matches ? '0px 0px' : '120px 0px',
-  });
-
-  tasks.forEach(task => {
-    const section = el(task.id);
-    if (section) observer.observe(section);
-  });
-}
-
-/* ??????????????????????????????????????????
-   媛ㅻ윭由??????????????????????????????????????????? */
+/* ──────────────────────────────────────────
+   갤러리
+────────────────────────────────────────── */
 function initGallery() {
   const C      = CONFIG;
   const tabBar = el('galleryTabBar');
@@ -362,15 +332,14 @@ function renderGallery(tabId, label) {
       item.setAttribute('role', 'img');
       item.setAttribute('aria-label', `${label} ${i + 1}`);
       const img = document.createElement('img');
-      img.src = src;
-      img.alt = `${label} ${i + 1}`;
+      img.src     = src;
+      img.alt     = `${label} ${i + 1}`;
       img.loading = 'lazy';
       img.decoding = 'async';
       item.appendChild(img);
       grid.appendChild(item);
     });
   } else {
-    // Placeholder items when no gallery images exist
     for (let i = 1; i <= 6; i++) {
       const item = document.createElement('div');
       item.className = 'gallery-item';
@@ -382,8 +351,9 @@ function renderGallery(tabId, label) {
   }
 }
 
-/* ??????????????????????????????????????????
-   ?됰㈃???????????????????????????????????????????? */
+/* ──────────────────────────────────────────
+   타입 소개 (평면도)
+────────────────────────────────────────── */
 function initFloorplan() {
   const tabBar  = el('floorplanTabBar');
   const content = el('floorplanContent');
@@ -439,7 +409,6 @@ function initFloorplan() {
   };
 
   floorplanTabs.forEach((tab, idx) => {
-    // ??踰꾪듉
     const btn = document.createElement('button');
     btn.className   = 'tab-btn' + (idx === 0 ? ' active' : '');
     btn.textContent = tab.label;
@@ -454,7 +423,6 @@ function initFloorplan() {
     });
     tabBar.appendChild(btn);
 
-    // ?⑤꼸
     const panel = document.createElement('div');
     panel.className = 'floorplan-panel' + (idx === 0 ? ' active' : '');
     panel.id        = 'fp-' + tab.id;
@@ -467,18 +435,18 @@ function initFloorplan() {
 
     const mainImgHtml = mainSrc
       ? `<img class="fp-main-img" src="${mainSrc}" alt="${tab.label} 평면도" loading="lazy" decoding="async">`
-      : `?됰㈃???대?吏<br>${tab.label}`;
+      : `평면도 이미지<br>${tab.label}`;
 
     const detailsHtml = (info.details || [])
       .map(d => `<p class="fp-detail">${d}</p>`).join('');
 
     const galleryHtml = gallery.length > 0
       ? `<div class="fp-gallery">
-           <h3 class="fp-gallery-title">${tab.label} ?대? 媛ㅻ윭由?/h3>
+           <h3 class="fp-gallery-title">${tab.label} 내부 갤러리</h3>
            <div class="fp-gallery-grid">
              ${gallery.map((src, i) =>
                `<div class="fp-gallery-item">
-                  <img src="${src}" alt="${tab.label} ?대? ${i + 1}" loading="lazy" decoding="async">
+                  <img src="${src}" alt="${tab.label} 내부 ${i + 1}" loading="lazy" decoding="async">
                 </div>`
              ).join('')}
            </div>
@@ -506,19 +474,19 @@ function initFloorplan() {
   initFpLightbox();
 }
 
-/* ??????????????????????????????????????????
-   ?됰㈃??媛ㅻ윭由??쇱씠?몃컯???????????????????????????????????????????? */
+/* ──────────────────────────────────────────
+   평면도 라이트박스
+────────────────────────────────────────── */
 function initFpLightbox() {
-  // ?ㅻ쾭?덉씠 ?앹꽦 (1??
   const lb = document.createElement('div');
   lb.id        = 'fpLightbox';
   lb.className = 'fp-lightbox';
   lb.setAttribute('aria-hidden', 'true');
   lb.innerHTML = `
     <div class="fp-lb-backdrop"></div>
-    <button class="fp-lb-close" aria-label="?リ린">??/button>
+    <button class="fp-lb-close" aria-label="닫기">✕</button>
     <div class="fp-lb-img-wrap">
-      <img class="fp-lb-img" src="" alt="?뺣? ?대?吏">
+      <img class="fp-lb-img" src="" alt="확대 이미지">
     </div>
   `;
   document.body.appendChild(lb);
@@ -542,16 +510,15 @@ function initFpLightbox() {
   lb.querySelector('.fp-lb-close').addEventListener('click', closeLb);
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
 
-  // Attach click handlers to floorplan gallery images
   document.querySelectorAll('.fp-gallery-item img').forEach(img => {
     img.style.cursor = 'zoom-in';
     img.addEventListener('click', () => openLb(img.src));
   });
 }
 
-/* ??????????????????????????????????????????
-   FAQ ?꾩퐫?붿뼵
-?????????????????????????????????????????? */
+/* ──────────────────────────────────────────
+   FAQ
+────────────────────────────────────────── */
 function initFAQ() {
   const accordion = el('faqAccordion');
 
@@ -582,7 +549,6 @@ function initFAQ() {
 
     qBtn.addEventListener('click', () => {
       const isOpen = item.classList.contains('open');
-      // ?ㅻⅨ ??ぉ ?リ린
       qsa('.accordion-item.open').forEach(openItem => {
         openItem.classList.remove('open');
         openItem.querySelector('.accordion-q').setAttribute('aria-expanded', 'false');
@@ -595,27 +561,63 @@ function initFAQ() {
   });
 }
 
-/* ??????????????????????????????????????????
-   ?곷떞 ?좎껌 ???????????????????????????????????????????? */
+/* ──────────────────────────────────────────
+   지연 렌더링
+────────────────────────────────────────── */
+function initDeferredSections() {
+  const tasks = [
+    { id: 'premium',  run: buildPremiumCards,  done: false },
+    { id: 'overview', run: buildOverviewCard,  done: false },
+    { id: 'location', run: initLocationSection, done: false },
+    { id: 'gallery',  run: initGallery,        done: false },
+    { id: 'types',    run: initFloorplan,      done: false },
+  ];
+
+  if (!('IntersectionObserver' in window)) {
+    tasks.forEach(task => task.run());
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const task = tasks.find(item => item.id === entry.target.id);
+      if (!task || task.done) return;
+      task.done = true;
+      task.run();
+      observer.unobserve(entry.target);
+    });
+  }, {
+    rootMargin: window.matchMedia('(max-width: 768px)').matches ? '0px 0px' : '120px 0px',
+  });
+
+  tasks.forEach(task => {
+    const section = el(task.id);
+    if (section) observer.observe(section);
+  });
+}
+
+/* ──────────────────────────────────────────
+   방문예약 폼 (#visit)
+────────────────────────────────────────── */
 function initContactForm() {
-  const form   = el('contactForm');
-  const phone1 = el('phone1');
-  const phone2 = el('phone2');
-  const phone3 = el('phone3');
+  const form          = el('contactForm');
+  const phone1        = el('phone1');
+  const phone2        = el('phone2');
+  const phone3        = el('phone3');
   const phoneCombined = el('phoneCombined');
   const privacyConsent = el('privacyConsent');
-  const submitBtn = el('contactSubmitBtn');
-  const status = el('formStatus');
+  const submitBtn     = el('contactSubmitBtn');
+  const status        = el('formStatus');
 
   if (!form || !phone1 || !phone2 || !phone3) return;
 
-  function setFormStatus(message, type = '') {
+  function setStatus(msg, type = '') {
     if (!status) return;
-    status.textContent = message;
+    status.textContent = msg;
     status.className = 'form-status' + (type ? ` is-${type}` : '');
   }
 
-  // ?レ옄留??낅젰 + ?먮룞 ?ъ빱???대룞
   phone1.addEventListener('input', () => {
     phone1.value = phone1.value.replace(/\D/g, '');
     if (phone1.value.length >= 3) phone2.focus();
@@ -630,7 +632,6 @@ function initContactForm() {
 
   form.addEventListener('submit', e => {
     e.preventDefault();
-
     const name  = el('inputName').value.trim();
     const p1    = phone1.value.trim();
     const p2    = phone2.value.trim();
@@ -638,26 +639,15 @@ function initContactForm() {
     const agree = el('agreeAll').checked;
     const endpoint = (form.getAttribute('action') || '').trim();
 
-    setFormStatus('');
+    setStatus('');
 
-    if (!name) {
-      alert('성함을 입력해주세요.');
-      el('inputName').focus();
-      return;
-    }
+    if (!name) { alert('성함을 입력해주세요.'); el('inputName').focus(); return; }
     if (!p1 || !p2 || !p3 || (p1 + p2 + p3).length < 9) {
-      alert('연락처를 정확히 입력해주세요.');
-      phone1.focus();
-      return;
+      alert('연락처를 정확히 입력해주세요.'); phone1.focus(); return;
     }
-    if (!agree) {
-      alert('개인정보 수집 및 이용에 동의해주세요.');
-      el('agreeAll').focus();
-      return;
-    }
-
+    if (!agree) { alert('개인정보 수집 및 이용에 동의해주세요.'); el('agreeAll').focus(); return; }
     if (!endpoint || endpoint.includes('YOUR_FORMSPREE_FORM_ID')) {
-      setFormStatus('Formspree 폼 ID를 먼저 입력해주세요.', 'error');
+      setStatus('Formspree 폼 ID를 먼저 입력해주세요.', 'error');
       alert('Formspree 폼 ID를 먼저 입력해주세요.');
       return;
     }
@@ -667,102 +657,356 @@ function initContactForm() {
 
     const formData = new FormData(form);
     if (submitBtn) submitBtn.disabled = true;
-    setFormStatus('상담 신청을 전송하고 있습니다...');
+    setStatus('방문예약 신청을 전송하고 있습니다...');
 
-    fetch(endpoint, {
-      method: 'POST',
-      body: formData,
-      headers: {
-        Accept: 'application/json',
-      },
-    })
+    fetch(endpoint, { method: 'POST', body: formData, headers: { Accept: 'application/json' } })
       .then(async response => {
         if (!response.ok) {
-          let errorMessage = '전송 중 오류가 발생했습니다.';
+          let msg = '전송 중 오류가 발생했습니다.';
           try {
-            const data = await response.json();
-            if (data?.errors?.[0]?.message) errorMessage = data.errors[0].message;
-          } catch (err) {
-            // Ignore JSON parse errors and use the default message.
-          }
-          throw new Error(errorMessage);
+            const d = await response.json();
+            if (d?.errors?.[0]?.message) msg = d.errors[0].message;
+          } catch (_) {}
+          throw new Error(msg);
         }
-
-        setFormStatus('상담 신청이 접수되었습니다. 빠르게 연락드리겠습니다.', 'success');
-        alert(`상담 신청이 접수되었습니다.\n입력하신 ${p1}-${p2}-${p3} 번호로 빠르게 연락드리겠습니다.`);
+        setStatus('방문예약 신청이 접수되었습니다. 빠르게 연락드리겠습니다.', 'success');
+        alert(`방문예약 신청이 접수되었습니다.\n${p1}-${p2}-${p3} 번호로 빠르게 연락드리겠습니다.`);
         form.reset();
       })
       .catch(error => {
-        setFormStatus(error.message || '전송에 실패했습니다. 잠시 후 다시 시도해주세요.', 'error');
+        setStatus(error.message || '전송에 실패했습니다. 잠시 후 다시 시도해주세요.', 'error');
         alert(error.message || '전송에 실패했습니다. 잠시 후 다시 시도해주세요.');
       })
-      .finally(() => {
-        if (submitBtn) submitBtn.disabled = false;
-      });
+      .finally(() => { if (submitBtn) submitBtn.disabled = false; });
   });
 }
 
-/* ??????????????????????????????????????????
-   ?쎄? ?좉?
-?????????????????????????????????????????? */
 function initTermsToggle() {
   const btn = el('termsToggle');
   const box = el('termsBox');
+  if (!btn || !box) return;
 
   btn.addEventListener('click', () => {
     const isHidden = box.hasAttribute('hidden');
     if (isHidden) {
       box.removeAttribute('hidden');
-      btn.textContent = '내용 닫기';
+      btn.textContent = '내용 닫기 ▴';
       btn.setAttribute('aria-expanded', 'true');
     } else {
       box.setAttribute('hidden', '');
-      btn.textContent = '내용 보기';
+      btn.textContent = '내용 보기 ▾';
       btn.setAttribute('aria-expanded', 'false');
     }
   });
 }
 
-/* ??????????????????????????????????????????
-   ?ㅽ겕濡??④낵
-?????????????????????????????????????????? */
-function initScrollEffects() {
-  const nav       = el('navHeader');
-  const floating  = el('floatingSide');
-  const bottomBar = el('bottomBar');
+/* ──────────────────────────────────────────
+   관심고객등록 폼 (#register)
+────────────────────────────────────────── */
+function initRegisterForm() {
+  const form     = el('registerForm');
+  const rp1      = el('regPhone1');
+  const rp2      = el('regPhone2');
+  const rp3      = el('regPhone3');
+  const combined = el('regPhoneCombined');
+  const submitBtn = el('registerSubmitBtn');
+  const status   = el('registerStatus');
+
+  if (!form || !rp1 || !rp2 || !rp3) return;
+
+  function setStatus(msg, type = '') {
+    if (!status) return;
+    status.textContent = msg;
+    status.className = 'form-status register-form-status' + (type ? ` is-${type}` : '');
+  }
+
+  rp1.addEventListener('input', () => {
+    rp1.value = rp1.value.replace(/\D/g, '');
+    if (rp1.value.length >= 3) rp2.focus();
+  });
+  rp2.addEventListener('input', () => {
+    rp2.value = rp2.value.replace(/\D/g, '');
+    if (rp2.value.length >= 4) rp3.focus();
+  });
+  rp3.addEventListener('input', () => {
+    rp3.value = rp3.value.replace(/\D/g, '');
+  });
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name  = el('regName').value.trim();
+    const p1    = rp1.value.trim();
+    const p2    = rp2.value.trim();
+    const p3    = rp3.value.trim();
+    const agree = el('regAgree').checked;
+    const endpoint = (form.getAttribute('action') || '').trim();
+
+    setStatus('');
+
+    if (!name) { alert('이름을 입력해주세요.'); el('regName').focus(); return; }
+    if (!p1 || !p2 || !p3 || (p1 + p2 + p3).length < 9) {
+      alert('연락처를 정확히 입력해주세요.'); rp1.focus(); return;
+    }
+    if (!agree) { alert('개인정보 수집 및 이용에 동의해주세요.'); el('regAgree').focus(); return; }
+    if (!endpoint || endpoint.includes('YOUR_FORMSPREE_FORM_ID')) {
+      setStatus('Formspree 폼 ID를 먼저 입력해주세요.', 'error');
+      alert('Formspree 폼 ID를 먼저 입력해주세요.');
+      return;
+    }
+
+    if (combined) combined.value = `${p1}-${p2}-${p3}`;
+
+    const formData = new FormData(form);
+    if (submitBtn) submitBtn.disabled = true;
+    setStatus('등록 중입니다...');
+
+    fetch(endpoint, { method: 'POST', body: formData, headers: { Accept: 'application/json' } })
+      .then(async response => {
+        if (!response.ok) {
+          let msg = '전송 중 오류가 발생했습니다.';
+          try {
+            const d = await response.json();
+            if (d?.errors?.[0]?.message) msg = d.errors[0].message;
+          } catch (_) {}
+          throw new Error(msg);
+        }
+        setStatus('관심고객 등록이 완료되었습니다. 우선 상담 혜택을 드리겠습니다!', 'success');
+        alert(`관심고객 등록이 완료되었습니다.\n${p1}-${p2}-${p3} 번호로 빠르게 연락드리겠습니다.`);
+        form.reset();
+      })
+      .catch(error => {
+        setStatus(error.message || '전송에 실패했습니다. 잠시 후 다시 시도해주세요.', 'error');
+        alert(error.message || '전송에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      })
+      .finally(() => { if (submitBtn) submitBtn.disabled = false; });
+  });
+}
+
+function initRegisterTermsToggle() {
+  const btn = el('regTermsToggle');
+  const box = el('regTermsBox');
+  if (!btn || !box) return;
+
+  btn.addEventListener('click', () => {
+    const isHidden = box.hasAttribute('hidden');
+    if (isHidden) {
+      box.removeAttribute('hidden');
+      btn.textContent = '내용 닫기 ▴';
+      btn.setAttribute('aria-expanded', 'true');
+    } else {
+      box.setAttribute('hidden', '');
+      btn.textContent = '내용 보기 ▾';
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
+/* ──────────────────────────────────────────
+   히어로 하단 관심고객 등록 폼 (복제)
+────────────────────────────────────────── */
+function initRegisterFormHero() {
+  const form      = el('registerFormHero');
+  const rp1       = el('regPhone1Hero');
+  const rp2       = el('regPhone2Hero');
+  const rp3       = el('regPhone3Hero');
+  const combined  = el('regPhoneCombinedHero');
+  const submitBtn = el('registerSubmitBtnHero');
+  const status    = el('registerStatusHero');
+
+  if (!form || !rp1 || !rp2 || !rp3) return;
+
+  function setStatus(msg, type = '') {
+    if (!status) return;
+    status.textContent = msg;
+    status.className = 'form-status register-form-status' + (type ? ` is-${type}` : '');
+  }
+
+  rp1.addEventListener('input', () => {
+    rp1.value = rp1.value.replace(/\D/g, '');
+    if (rp1.value.length >= 3) rp2.focus();
+  });
+  rp2.addEventListener('input', () => {
+    rp2.value = rp2.value.replace(/\D/g, '');
+    if (rp2.value.length >= 4) rp3.focus();
+  });
+  rp3.addEventListener('input', () => {
+    rp3.value = rp3.value.replace(/\D/g, '');
+  });
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name     = el('regNameHero').value.trim();
+    const p1       = rp1.value.trim();
+    const p2       = rp2.value.trim();
+    const p3       = rp3.value.trim();
+    const agree    = el('regAgreeHero').checked;
+    const endpoint = (form.getAttribute('action') || '').trim();
+
+    setStatus('');
+
+    if (!name) { alert('이름을 입력해주세요.'); el('regNameHero').focus(); return; }
+    if (!p1 || !p2 || !p3 || (p1 + p2 + p3).length < 9) {
+      alert('연락처를 정확히 입력해주세요.'); rp1.focus(); return;
+    }
+    if (!agree) { alert('개인정보 수집 및 이용에 동의해주세요.'); el('regAgreeHero').focus(); return; }
+    if (!endpoint || endpoint.includes('YOUR_FORMSPREE_FORM_ID')) {
+      setStatus('Formspree 폼 ID를 먼저 입력해주세요.', 'error'); return;
+    }
+
+    if (combined) combined.value = `${p1}-${p2}-${p3}`;
+
+    const formData = new FormData(form);
+    if (submitBtn) submitBtn.disabled = true;
+    setStatus('등록 중입니다...');
+
+    fetch(endpoint, { method: 'POST', body: formData, headers: { Accept: 'application/json' } })
+      .then(async response => {
+        if (!response.ok) {
+          let msg = '전송 중 오류가 발생했습니다.';
+          try {
+            const d = await response.json();
+            if (d?.errors?.[0]?.message) msg = d.errors[0].message;
+          } catch (_) {}
+          throw new Error(msg);
+        }
+        setStatus('등록이 완료되었습니다. 빠르게 연락드리겠습니다!', 'success');
+        alert(`관심고객 등록이 완료되었습니다.\n${p1}-${p2}-${p3} 번호로 빠르게 연락드리겠습니다.`);
+        form.reset();
+      })
+      .catch(error => {
+        setStatus(error.message || '전송에 실패했습니다. 잠시 후 다시 시도해주세요.', 'error');
+        alert(error.message || '전송에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      })
+      .finally(() => { if (submitBtn) submitBtn.disabled = false; });
+  });
+}
+
+function initRegisterTermsToggleHero() {
+  const btn = el('regTermsToggleHero');
+  const box = el('regTermsBoxHero');
+  if (!btn || !box) return;
+
+  btn.addEventListener('click', () => {
+    const isHidden = box.hasAttribute('hidden');
+    if (isHidden) {
+      box.removeAttribute('hidden');
+      btn.textContent = '닫기';
+      btn.setAttribute('aria-expanded', 'true');
+    } else {
+      box.setAttribute('hidden', '');
+      btn.textContent = '보기';
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
+/* ──────────────────────────────────────────
+   미디어 더보기 / 접기
+────────────────────────────────────────── */
+function initMedia() {
+  document.querySelectorAll('.media-more-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const body   = btn.closest('.media-card').querySelector('.media-card-body');
+      const isOpen = body.classList.contains('is-open');
+
+      body.classList.toggle('is-open', !isOpen);
+      btn.textContent = isOpen ? '더 보기' : '접기';
+      btn.setAttribute('aria-expanded', String(!isOpen));
+    });
+  });
+}
+
+/* ──────────────────────────────────────────
+   스크롤 기반 현재 섹션 활성 메뉴
+────────────────────────────────────────── */
+function initNavActiveSection() {
+  const links = Array.from(document.querySelectorAll('#navList a[href^="#"]'));
+  if (!links.length) return;
+
+  // href → { a, el } 매핑 (el은 스크롤 시 지연 초기화 — 지연 렌더 섹션 대응)
+  const items = links.map(a => ({ a, id: a.getAttribute('href').slice(1), el: null }));
+
+  // 고정 헤더 높이 + 여유값으로 오프셋 계산
+  const navH   = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 68;
+  const OFFSET = navH + 32;
+
+  const setActive = activeA => {
+    links.forEach(a => a.classList.remove('active'));
+    if (activeA) activeA.classList.add('active');
+  };
 
   const onScroll = () => {
-    const y       = window.scrollY;
+    // 모바일(≤768px)에서는 상단 nav가 숨겨지므로 처리 불필요
+    if (window.innerWidth <= 768) return;
+
+    const scrollTop = window.scrollY + OFFSET;
+    let current = null;
+
+    for (const item of items) {
+      if (!item.el) item.el = document.getElementById(item.id);
+      if (!item.el) continue;
+      if (item.el.offsetTop <= scrollTop) current = item.a;
+    }
+
+    setActive(current);
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  onScroll();
+}
+
+/* ──────────────────────────────────────────
+   스크롤 효과
+────────────────────────────────────────── */
+function initScrollEffects() {
+  const nav        = el('navHeader');
+  const floating   = el('floatingSide');
+  const bottomBar  = el('bottomBar');
+  const promoStrip = el('mobPromoStrip');
+
+  const isMobile = () => window.innerWidth <= 768;
+
+  const onScroll = () => {
+    const y        = window.scrollY;
     const scrolled = y > 100;
-    nav.classList.toggle('visible',  scrolled);
+    const mobile   = isMobile();
+
+    // PC: 상단 네비 항상 표시 / 모바일: 스크롤 100px 이후 표시
+    nav.classList.toggle('visible',  mobile ? scrolled : true);
     nav.classList.toggle('scrolled', y > 60);
-    bottomBar.classList.toggle('visible', scrolled);
+
+    // 하단 바 + 프로모션 스트립: 모바일에서만 스크롤 100px 이후 표시
+    bottomBar.classList.toggle('visible', mobile && scrolled);
+    promoStrip?.classList.toggle('visible', mobile && scrolled);
+
     floating.classList.toggle('visible', y > 400);
   };
 
   window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll(); // 珥덇린 ?ㅽ뻾
+  // 리사이즈(태블릿 회전 등)에도 즉시 반영
+  window.addEventListener('resize', onScroll, { passive: true });
+  onScroll();
 }
 
-/* ??????????????????????????????????????????
-   ?덉뼱濡??щ씪?대뜑
-?????????????????????????????????????????? */
+/* ──────────────────────────────────────────
+   히어로 슬라이더
+────────────────────────────────────────── */
 function initHeroSlider() {
   const track  = el('heroTrack');
   const images = ['images/hero/main-hero-optimized.jpg'];
   const count  = images.length;
 
-  /* ?? ?щ씪?대뱶 ?앹꽦 ?? */
   for (let i = 0; i < count; i++) {
     const slide = document.createElement('div');
     slide.className = 'hero-slide';
 
     if (images[i]) {
       const img = document.createElement('img');
-      img.src     = images[i];
-      img.alt     = `?덉뼱濡??щ씪?대뱶 ${i + 1}`;
-      img.loading = i === 0 ? 'eager' : 'lazy';
-      img.decoding = 'async';
+      img.src          = images[i];
+      img.alt          = `히어로 슬라이드 ${i + 1}`;
+      img.loading      = i === 0 ? 'eager' : 'lazy';
+      img.decoding     = 'async';
       if (i === 0) img.fetchPriority = 'high';
       slide.appendChild(img);
     } else {
@@ -778,7 +1022,6 @@ function initHeroSlider() {
     track.appendChild(slide);
   }
 
-  /* ?? ?섏씠???꾪솚 ?? */
   const slides = Array.from(track.querySelectorAll('.hero-slide'));
   let current = 0;
 
@@ -787,41 +1030,33 @@ function initHeroSlider() {
     slides.forEach((s, i) => s.classList.toggle('active', i === current));
   }
 
-  function nextSlide() {
-    showSlide(current + 1);
-  }
-
   showSlide(0);
-  if (count > 1) setInterval(nextSlide, 3000);
+  if (count > 1) setInterval(() => showSlide(current + 1), 3000);
 }
 
-/* ??????????????????????????????????????????
-   ?쒗깮 ?덈궡 ?앹뾽
-?????????????????????????????????????????? */
+/* ──────────────────────────────────────────
+   팝업
+────────────────────────────────────────── */
 function initPopup() {
   const overlay = document.getElementById('popupOverlay');
   if (!overlay) return;
 
-  const closeBtn = document.getElementById('popupClose');
+  const closeBtn     = document.getElementById('popupClose');
   const hideTodayBtn = document.getElementById('popupHideToday');
-  const track    = document.getElementById('popupTrack');
-  const dots     = document.querySelectorAll('.popup-dot');
-  const prevBtn  = document.getElementById('popupPrev');
-  const nextBtn  = document.getElementById('popupNext');
-  const total    = dots.length;
-  const hideKey  = 'popupHiddenUntil';
-  let current    = 0;
-  let opened     = false;
+  const track        = document.getElementById('popupTrack');
+  const dots         = document.querySelectorAll('.popup-dot');
+  const prevBtn      = document.getElementById('popupPrev');
+  const nextBtn      = document.getElementById('popupNext');
+  const total        = dots.length;
+  const hideKey      = 'popupHiddenUntil';
+  let current        = 0;
+  let opened         = false;
 
   function getHideUntil() {
     const stored = Number(window.localStorage.getItem(hideKey) || 0);
     return Number.isFinite(stored) ? stored : 0;
   }
-
-  function isHiddenToday() {
-    return getHideUntil() > Date.now();
-  }
-
+  function isHiddenToday() { return getHideUntil() > Date.now(); }
   function hideUntilTomorrow() {
     const tomorrow = new Date();
     tomorrow.setHours(24, 0, 0, 0);
@@ -830,17 +1065,13 @@ function initPopup() {
 
   function loadPopupImages() {
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const targets = overlay.querySelectorAll((isMobile ? '.popup-mobile' : '.popup-pc') + ' img[data-src]');
-    targets.forEach((img) => {
-      if (!img.getAttribute('src')) {
-        img.src = img.dataset.src;
-      }
-    });
+    const targets  = overlay.querySelectorAll((isMobile ? '.popup-mobile' : '.popup-pc') + ' img[data-src]');
+    targets.forEach(img => { if (!img.getAttribute('src')) img.src = img.dataset.src; });
   }
 
   function goTo(n) {
     current = (n + total) % total;
-    const slides = track.querySelectorAll('.popup-slide img[data-src]');
+    const slides    = track.querySelectorAll('.popup-slide img[data-src]');
     const currentImg = slides[current];
     if (currentImg && !currentImg.getAttribute('src')) currentImg.src = currentImg.dataset.src;
     track.style.transform = `translateX(-${current * 100}%)`;
@@ -866,22 +1097,17 @@ function initPopup() {
   prevBtn.addEventListener('click', () => goTo(current - 1));
   nextBtn.addEventListener('click', () => goTo(current + 1));
   closeBtn.addEventListener('click', closePopup);
-  if (hideTodayBtn) {
-    hideTodayBtn.addEventListener('click', () => {
-      hideUntilTomorrow();
-      closePopup();
-    });
-  }
-  overlay.addEventListener('click', (e) => { if (e.target === overlay) closePopup(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePopup(); });
+  if (hideTodayBtn) hideTodayBtn.addEventListener('click', () => { hideUntilTomorrow(); closePopup(); });
+  overlay.addEventListener('click', e => { if (e.target === overlay) closePopup(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
 
-  const popupDelay = window.matchMedia('(max-width: 768px)').matches ? 4500 : 3000;
-  if (!isHiddenToday()) window.setTimeout(openPopup, popupDelay);
+  const delay = window.matchMedia('(max-width: 768px)').matches ? 4500 : 3000;
+  if (!isHiddenToday()) window.setTimeout(openPopup, delay);
 }
 
-/* ??????????????????????????????????????????
-   ?좏떥
-?????????????????????????????????????????? */
+/* ──────────────────────────────────────────
+   유틸
+────────────────────────────────────────── */
 const el  = id  => document.getElementById(id);
 const qs  = sel => document.querySelector(sel);
 const qsa = sel => document.querySelectorAll(sel);
@@ -890,5 +1116,3 @@ function setHref(id, href) {
   const node = el(id);
   if (node) node.href = href;
 }
-
-

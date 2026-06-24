@@ -27,8 +27,10 @@ const CONFIG = {
     { label: "단지개요", href: "#overview"  },
     { label: "위치안내", href: "#location"  },
     { label: "갤러리",   href: "#gallery"   },
-    { label: "평면도",   href: "#floorplan" },
-    { label: "상담신청", href: "#contact"   },
+    { label: "타입소개", href: "#types"     },
+    { label: "미디어",   href: "#media"     },
+    { label: "관심등록", href: "#register"  },
+    { label: "방문예약", href: "#visit"     },
   ],
 
   /* ─────────────────────────────
@@ -49,6 +51,13 @@ const CONFIG = {
       { label: "금융혜택", value: "중도금\n전액 무이자" },
       { label: "무상혜택", value: "확장비 무상\n혜택까지" },
     ],
+  },
+
+  /* ─────────────────────────────
+     모바일 전용 배너 (≤768px)
+  ───────────────────────────── */
+  mobBanner: {
+    image: "images/hero/main-hero-optimized.jpg", // 🖼️ 모바일 전용 배너 이미지 교체 가능
   },
 
   /* ─────────────────────────────
