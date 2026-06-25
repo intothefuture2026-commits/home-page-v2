@@ -446,7 +446,16 @@ section { padding: 88px 0; }
 .hero-slide.active {
   opacity: 1;
 }
-.hero-slide img {
+/* ── 주간/야간 레이어 컨테이너 ── */
+.hero-slide-day,
+.hero-slide-night {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* 단일 이미지 슬라이드 (하위 호환) */
+.hero-slide > img {
   width: 100%; height: 100%;
   object-fit: contain;
   object-position: center bottom;
@@ -454,13 +463,49 @@ section { padding: 88px 0; }
   transform-origin: center center;
 }
 
-@keyframes heroZoom {
-  from { transform: scale(1); }
-  to   { transform: scale(1.08); }
+/* 주간/야간 레이어 이미지 – 풀커버 */
+.hero-slide-day img,
+.hero-slide-night img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  transform-origin: center center;
 }
-.hero-slide.active img,
+
+/* 야간 레이어: 기본 숨김 */
+.hero-slide-night { opacity: 0; }
+
+/* ── Ken Burns: 2% 미만 극소 줌 (PC) ── */
+@keyframes kbZoom {
+  from { transform: scale(1); }
+  to   { transform: scale(1.022); }
+}
+/* ── Ken Burns: 모바일 전용 — 1% 이하 ── */
+@keyframes kbZoomMob {
+  from { transform: scale(1); }
+  to   { transform: scale(1.010); }
+}
+
+/* ── 주간 → 야간 → 주간 crossfade (6s 주기) ── */
+@keyframes nightFade {
+  0%   { opacity: 0; }   /* day 유지 */
+  25%  { opacity: 0; }
+  40%  { opacity: 1; }   /* night로 전환 */
+  75%  { opacity: 1; }   /* night 유지 */
+  90%  { opacity: 0; }   /* day로 복귀 */
+  100% { opacity: 0; }
+}
+
+.hero-slide.active .hero-slide-day img,
+.hero-slide.active .hero-slide-night img,
+.hero-slide.active > img,
 .hero-slide.active .hero-slide-bg {
-  animation: heroZoom 6s ease-in-out forwards;
+  animation: kbZoom 22s ease-in-out forwards;
+}
+
+.hero-slide.active .hero-slide-night {
+  animation: nightFade 6s ease-in-out infinite;
 }
 
 /* 이미지 없을 때 플레이스홀더 */
@@ -476,24 +521,25 @@ section { padding: 88px 0; }
   letter-spacing: 0.1em;
 }
 
-/* 슬라이드 오버레이 */
+/* 슬라이드 오버레이 — 라디알 비네팅 + 딥톤 그라데이션 */
 .hero-slide-overlay {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg,
-      rgba(11, 27, 54, 0.78) 0%,
-      rgba(11, 27, 54, 0.42) 18%,
-      rgba(11, 27, 54, 0.18) 34%,
-      rgba(11, 27, 54, 0.18) 66%,
-      rgba(11, 27, 54, 0.42) 82%,
-      rgba(11, 27, 54, 0.78) 100%
+    /* 가장자리 비네팅: 중앙 건물 영역 보호 */
+    radial-gradient(
+      ellipse 72% 62% at 50% 54%,
+      transparent 35%,
+      rgba(4, 11, 24, 0.50) 72%,
+      rgba(4, 11, 24, 0.82) 100%
     ),
+    /* 상단 텍스트 가독성 그라데이션 */
     linear-gradient(
       180deg,
-      rgba(10, 24, 48, 0.34) 0%,
-      rgba(10, 24, 48, 0.08) 38%,
-      rgba(10, 24, 48, 0.22) 100%
+      rgba(4, 11, 24, 0.62) 0%,
+      rgba(4, 11, 24, 0.18) 26%,
+      transparent 46%,
+      rgba(4, 11, 24, 0.28) 100%
     );
 }
 
@@ -753,8 +799,8 @@ section { padding: 88px 0; }
 
 .premium-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 36px 32px;
 }
 
 .premium-card {
@@ -792,12 +838,12 @@ section { padding: 88px 0; }
 
 /* 텍스트 영역 (박스 아래) */
 .card-body {
-  padding: 20px 8px 0;
+  padding: 14px 8px 0;
 }
 
-/* 뱃지/라벨 수준 */
+/* 뱃지/라벨 수준 (미사용 — 하위호환 보존) */
 .premium-card .card-num {
-  display: inline-block;
+  display: none;
   width: 32px; height: 32px;
   border-radius: 50%;
   background: var(--primary-light);
@@ -1001,7 +1047,7 @@ section { padding: 88px 0; }
 .gallery .section-tag   { color: var(--color-beige); }
 .gallery .section-title { color: var(--white); }
 
-/* 탭 바 공통 */
+/* ── 탭 바 공통 (평면도 등 다른 섹션용 기본값) ── */
 .tab-bar {
   display: flex;
   gap: 8px;
@@ -1009,7 +1055,6 @@ section { padding: 88px 0; }
   flex-wrap: wrap;
 }
 
-/* 뱃지/라벨 수준 */
 .tab-btn {
   padding: 10px 26px;
   border-radius: 40px;
@@ -1021,7 +1066,7 @@ section { padding: 88px 0; }
   font-weight: var(--fw-medium);
   line-height: var(--lh-heading);
   letter-spacing: var(--ls-badge);
-  text-transform: uppercase;
+  cursor: pointer;
   transition: all var(--transition);
 }
 .tab-btn.active, .tab-btn:hover {
@@ -1042,37 +1087,79 @@ section { padding: 88px 0; }
   color: var(--white);
 }
 
-/* 갤러리 그리드 */
+/* ── 갤러리 패널: 탭 + 그리드를 하나의 카드로 묶음 ── */
+.gallery-panel {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* ── 갤러리 패널 탭바: 세그먼트 컨트롤 ── */
+.gallery-panel .tab-bar {
+  margin-bottom: 0;
+  flex-wrap: nowrap;           /* 한 줄 고정 */
+  gap: 0;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.gallery-panel .tab-btn {
+  flex: 1;                     /* 균등 너비 */
+  text-align: center;
+  white-space: nowrap;
+  border: 2px solid rgba(255, 255, 255, 0.14);
+  border-radius: 40px;
+  padding: 10px 12px;
+  color: rgba(255, 255, 255, 0.50);
+  background: transparent;
+  margin: 0 4px;
+}
+.gallery-panel .tab-btn:first-child { margin-left: 0; }
+.gallery-panel .tab-btn:last-child  { margin-right: 0; }
+
+.gallery-panel .tab-btn.active,
+.gallery-panel .tab-btn:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
+}
+
+/* ── 갤러리 그리드 — 2열, 이미지 2배 크기 ── */
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 28px;
 }
 
 .gallery-item {
   aspect-ratio: 4/3;
   background: var(--navy-mid);
-  border-radius: var(--radius);
+  border-radius: 12px;
   overflow: hidden;
   position: relative;
   cursor: pointer;
   transition: transform var(--transition);
   border: 1px solid rgba(255,255,255,0.07);
 }
-.gallery-item:hover { transform: scale(1.03); }
-.gallery-item:nth-child(1) { grid-column: span 1; }
+.gallery-item:hover { transform: scale(1.025); }
 
-/* 커뮤니티 탭(3장): 3열 균등 배치 */
-.gallery-grid[data-tab="community"] .gallery-item:nth-child(1) {
-  grid-column: span 1;
+/* 커뮤니티(3장): 첫 이미지 와이드 피처드, 나머지 2열 */
+.gallery-grid[data-tab="community"] .gallery-item:first-child {
+  grid-column: span 2;
+  aspect-ratio: 16/7;
 }
+
 .gallery-item img {
   width: 100%; height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.5s ease;
 }
+.gallery-item:hover img { transform: scale(1.04); }
 
-/* 보조텍스트 수준 */
 .gallery-item .img-placeholder {
   width: 100%; height: 100%;
   display: flex;
@@ -1620,7 +1707,7 @@ section { padding: 88px 0; }
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 .hp-field {
@@ -1696,6 +1783,7 @@ section { padding: 88px 0; }
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  margin-top: 4px;
   flex-wrap: wrap;
 }
 /* 보조텍스트 수준 */
@@ -2157,9 +2245,12 @@ section { padding: 88px 0; }
     --fs-sub:   12px;
   }
 
-  .premium-grid { grid-template-columns: 1fr 1fr; }
-  .gallery-grid { grid-template-columns: 1fr 1fr; }
-  .gallery-item:nth-child(1) { grid-column: span 1; }
+  .premium-grid { gap: 28px 24px; }
+  /* 태블릿: 갤러리 패널 */
+  .gallery-panel { border-radius: 14px; }
+  .gallery-panel .tab-bar { padding: 12px 16px; }
+  .gallery-panel .tab-btn { padding: 9px 10px; font-size: 14px; margin: 0 3px; }
+  .gallery-panel .gallery-grid { padding: 18px; gap: 10px; }
 
   /* 평면도 강조문구 — 태블릿에서 줄바꿈 허용 */
   .floorplan-info .fp-highlight { white-space: normal; }
@@ -2209,7 +2300,7 @@ section { padding: 88px 0; }
   .hero-info-strip { gap: 20px; }
 
   /* 프리미엄 */
-  .premium-grid { grid-template-columns: 1fr; }
+  .premium-grid { grid-template-columns: 1fr; gap: 24px; }
 
   /* 단지개요 */
   .overview-img { height: 220px; }
@@ -2222,8 +2313,12 @@ section { padding: 88px 0; }
   .location-layout { flex-direction: column; }
   .location-map { flex: none; height: 220px; }
 
-  /* 갤러리 */
-  .gallery-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  /* 갤러리 — 모바일(768px): 1열로 전환 */
+  .gallery-panel .gallery-grid { grid-template-columns: 1fr; padding: 14px; gap: 10px; }
+  .gallery-panel .gallery-grid[data-tab="community"] .gallery-item:first-child {
+    grid-column: span 1;
+    aspect-ratio: 4/3;
+  }
 
   /* 평면도 */
   .floorplan-content { padding: 24px 16px; }
@@ -2243,8 +2338,10 @@ section { padding: 88px 0; }
 
 /* 소형 (≤ 480px) */
 @media (max-width: 480px) {
-  .gallery-grid { grid-template-columns: 1fr; }
-  .gallery-item:nth-child(1) { grid-column: span 1; }
+  .gallery-panel { border-radius: 12px; }
+  .gallery-panel .tab-bar { padding: 10px 12px; }
+  .gallery-panel .tab-btn { padding: 8px 6px; font-size: 13px; margin: 0 2px; }
+  .gallery-panel .gallery-grid { padding: 12px; gap: 8px; }
 }
 
 /* ══════════════════════════════════════════
@@ -2445,27 +2542,35 @@ section { padding: 88px 0; }
     text-overflow: ellipsis;
   }
 
-  .hero-slide img {
+  .hero-slide img,
+  .hero-slide-day img,
+  .hero-slide-night img {
     object-fit: cover;
-    object-position: 52% 82%;
-    transform-origin: center bottom;
+    object-position: 50% 55%;   /* 중앙 건물 기준 크롭 */
+    transform-origin: center center;
+  }
+  /* 모바일: 더 약한 Ken Burns (1% 이하) */
+  .hero-slide.active .hero-slide-day img,
+  .hero-slide.active .hero-slide-night img,
+  .hero-slide.active > img {
+    animation: kbZoomMob 22s ease-in-out forwards;
   }
   .hero-slide-overlay {
     background:
+      /* 가장자리 비네팅 */
+      radial-gradient(
+        ellipse 78% 58% at 50% 48%,
+        transparent 28%,
+        rgba(4, 11, 24, 0.45) 70%,
+        rgba(4, 11, 24, 0.78) 100%
+      ),
+      /* 상단 텍스트 영역 */
       linear-gradient(
         180deg,
-        rgba(10, 24, 48, 0.44) 0%,
-        rgba(10, 24, 48, 0.16) 30%,
-        rgba(10, 24, 48, 0.08) 54%,
-        rgba(10, 24, 48, 0.26) 100%
-      ),
-      linear-gradient(
-        90deg,
-        rgba(11, 27, 54, 0.54) 0%,
-        rgba(11, 27, 54, 0.2) 18%,
-        rgba(11, 27, 54, 0.06) 50%,
-        rgba(11, 27, 54, 0.2) 82%,
-        rgba(11, 27, 54, 0.54) 100%
+        rgba(4, 11, 24, 0.68) 0%,
+        rgba(4, 11, 24, 0.22) 28%,
+        transparent 50%,
+        rgba(4, 11, 24, 0.32) 100%
       );
   }
   .hero-body { padding-top: 11vh; }
@@ -2567,7 +2672,12 @@ section { padding: 88px 0; }
 
 @media (max-width: 480px) {
   .container { padding: 0 14px; }
-  .hero-slide img { object-position: 50% 80%; }
+  .hero-slide img,
+  .hero-slide-day img,
+  .hero-slide-night img { object-position: 50% 55%; }
+  .hero-slide.active .hero-slide-day img,
+  .hero-slide.active .hero-slide-night img,
+  .hero-slide.active > img { animation: kbZoomMob 22s ease-in-out forwards; }
   .hero-body { padding-top: 9vh; }
   .hero-sub { font-size: 16px; }
   .hero-title { font-size: clamp(24px, 8.2vw, 30px); }

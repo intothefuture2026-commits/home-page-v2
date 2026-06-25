@@ -148,26 +148,22 @@ function buildPremiumCards() {
     {
       title: '입지환경 | 양호',
       desc: '동측 공원 및 북측 구운지구, 서호지구 개발로 입지 우상향',
-      image: 'images/premium/point01-optimized.jpg',
-      video: '',
+      video: 'images/premium/point01.webm',
     },
     {
       title: '교통환경 | 양호',
       desc: '철도 및 고속도로 등 우수한 도로교통망',
-      image: 'images/premium/point02-optimized.jpg',
-      video: '',
+      video: 'images/premium/point02.webm',
     },
     {
       title: '교육환경 | 양호',
       desc: '도보통학 가능한 학세권 입지로 교육여건 양호',
-      image: 'images/premium/point03-optimized.jpg',
-      video: '',
+      video: 'images/premium/point03.webm',
     },
     {
       title: '생활편의 | 양호',
       desc: '대형마트, 백화점 및 복합쇼핑몰 인근 위치로 생활인프라 풍부',
-      image: 'images/premium/point04-optimized.jpg',
-      video: '',
+      video: 'images/premium/point04.webm',
     },
   ];
 
@@ -175,33 +171,53 @@ function buildPremiumCards() {
     const card = document.createElement('div');
     card.className = 'premium-card';
 
-    const hasVideo = pt.video && pt.video.trim() !== '';
-    const hasImage = pt.image && pt.image.trim() !== '';
-    const ext      = hasVideo ? pt.video.split('.').pop().toLowerCase() : '';
-    const mime     = ext === 'webm' ? 'video/webm' : 'video/mp4';
+    // 미디어 박스
+    const media = document.createElement('div');
+    media.className = 'card-media';
 
-    let mediaInner = '';
-    if (hasVideo) {
-      mediaInner = `<video class="card-media-video" autoplay muted loop playsinline>
-          <source src="${pt.video}" type="${mime}">
-          ${hasImage ? `<img class="card-media-img" src="${pt.image}" alt="${pt.title}">` : ''}
-        </video>`;
-    } else if (hasImage) {
-      mediaInner = `<img class="card-media-img" src="${pt.image}" alt="${pt.title}" loading="lazy" decoding="async">`;
-    }
+    // video 요소: createElement 방식으로 muted 속성 신뢰성 확보 (모바일 자동재생)
+    const video = document.createElement('video');
+    video.className   = 'card-media-video';
+    video.autoplay    = true;
+    video.muted       = true;   // 프로퍼티로 설정해야 iOS/Android에서 확실히 음소거
+    video.loop        = true;
+    video.playsInline = true;
+    video.setAttribute('playsinline', '');  // iOS 호환
+    video.setAttribute('disablepictureinpicture', '');
+    const source = document.createElement('source');
+    source.src  = pt.video;
+    source.type = 'video/webm';
+    video.appendChild(source);
+    media.appendChild(video);
 
-    card.innerHTML = `
-      <div class="card-media">${mediaInner}</div>
-      <div class="card-body">
-        <span class="card-num" aria-hidden="true">0${idx + 1}</span>
-        <h3 class="card-title">${pt.title}</h3>
-        <p class="card-desc">${pt.desc || ''}</p>
-      </div>
+    // 텍스트 영역
+    const body = document.createElement('div');
+    body.className = 'card-body';
+    body.innerHTML = `
+      <h3 class="card-title">${pt.title}</h3>
+      <p class="card-desc">${pt.desc || ''}</p>
     `;
+
+    card.appendChild(media);
+    card.appendChild(body);
     grid.appendChild(card);
   });
 
   grid.dataset.ready = 'true';
+
+  // iOS 등 자동재생 정책 대응: IntersectionObserver로 뷰포트 진입 시 play() 강제 호출
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const v = entry.target;
+      if (entry.isIntersecting) {
+        v.play().catch(() => {});
+      } else {
+        v.pause();
+      }
+    });
+  }, { threshold: 0.25 });
+
+  grid.querySelectorAll('video').forEach(v => observer.observe(v));
 }
 
 /* ──────────────────────────────────────────
@@ -210,7 +226,7 @@ function buildPremiumCards() {
 function buildOverviewCard() {
   const img = el('overviewImg');
   if (img) {
-    img.src          = 'images/overview/overview-optimized.jpg';
+    img.src          = CONFIG?.overview?.image || 'images/overview/overview.png';
     img.loading      = 'lazy';
     img.decoding     = 'async';
     img.fetchPriority = 'low';
@@ -994,19 +1010,44 @@ function initScrollEffects() {
 ────────────────────────────────────────── */
 function initHeroSlider() {
   const track  = el('heroTrack');
-  const images = ['images/hero/main-hero-optimized.jpg'];
+  const images = CONFIG?.hero?.images ?? ['images/hero/main-hero-optimized.jpg'];
   const count  = images.length;
 
   for (let i = 0; i < count; i++) {
+    const entry = images[i];
     const slide = document.createElement('div');
     slide.className = 'hero-slide';
 
-    if (images[i]) {
+    const isDayNight = entry && typeof entry === 'object' && entry.day;
+
+    if (isDayNight) {
+      // 주간/야간 두 레이어 crossfade
+      const dayLayer = document.createElement('div');
+      dayLayer.className = 'hero-slide-day';
+      const dayImg = document.createElement('img');
+      dayImg.src     = entry.day;
+      dayImg.alt     = `히어로 주간 ${i + 1}`;
+      dayImg.loading = i === 0 ? 'eager' : 'lazy';
+      dayImg.decoding = 'async';
+      if (i === 0) dayImg.fetchPriority = 'high';
+      dayLayer.appendChild(dayImg);
+      slide.appendChild(dayLayer);
+
+      const nightLayer = document.createElement('div');
+      nightLayer.className = 'hero-slide-night';
+      const nightImg = document.createElement('img');
+      nightImg.src     = entry.night || '';
+      nightImg.alt     = `히어로 야간 ${i + 1}`;
+      nightImg.loading = 'lazy';
+      nightImg.decoding = 'async';
+      nightLayer.appendChild(nightImg);
+      slide.appendChild(nightLayer);
+    } else if (typeof entry === 'string' && entry) {
       const img = document.createElement('img');
-      img.src          = images[i];
-      img.alt          = `히어로 슬라이드 ${i + 1}`;
-      img.loading      = i === 0 ? 'eager' : 'lazy';
-      img.decoding     = 'async';
+      img.src      = entry;
+      img.alt      = `히어로 슬라이드 ${i + 1}`;
+      img.loading  = i === 0 ? 'eager' : 'lazy';
+      img.decoding = 'async';
       if (i === 0) img.fetchPriority = 'high';
       slide.appendChild(img);
     } else {
@@ -1025,13 +1066,25 @@ function initHeroSlider() {
   const slides = Array.from(track.querySelectorAll('.hero-slide'));
   let current = 0;
 
+  function resetAnimations(slide) {
+    slide.querySelectorAll('img, .hero-slide-bg, .hero-slide-night').forEach(node => {
+      node.style.animation = 'none';
+      node.offsetHeight; // reflow – 애니메이션 초기화
+      node.style.animation = '';
+    });
+  }
+
   function showSlide(index) {
     current = ((index % count) + count) % count;
-    slides.forEach((s, i) => s.classList.toggle('active', i === current));
+    slides.forEach((s, i) => {
+      const wasActive = s.classList.contains('active');
+      s.classList.toggle('active', i === current);
+      if (!wasActive && i === current) resetAnimations(s);
+    });
   }
 
   showSlide(0);
-  if (count > 1) setInterval(() => showSlide(current + 1), 3000);
+  if (count > 1) setInterval(() => showSlide(current + 1), 8000);
 }
 
 /* ──────────────────────────────────────────

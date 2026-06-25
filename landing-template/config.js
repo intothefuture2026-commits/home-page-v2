@@ -44,7 +44,10 @@ const CONFIG = {
     // 🖼️ 이미지 교체 구역
     bgImage:  "",                      // 🖼️ 히어로 배경 (슬라이드 1장일 때 사용)
     images: [                          // 🖼️ 슬라이드 이미지 배열
-      "images/hero/main-hero-optimized.jpg", // 🖼️ 슬라이드 1
+      {                                // 🖼️ 슬라이드 1: {day, night} 쌍 → crossfade
+        day:   "images/hero/main-hero1.png",
+        night: "images/hero/main-hero.png",
+      },
     ],
     heroBenefits: [
       { label: "계약혜택", value: "입주시까지\n500만원 끝!" },
@@ -150,16 +153,17 @@ const CONFIG = {
   ───────────────────────────── */
   galleryImages: {
     interior:  [                                  // 내부 탭 이미지
-      "images/interior/premium_interior-optimized.jpg",   // 🖼️ 내부 사진 1
-      "images/interior/premium_interior1-optimized.jpg",  // 🖼️ 내부 사진 2
+      "images/interior/premium_interior.png",    // 🖼️ 내부 사진 1
+      "images/interior/premium_interior1.png",   // 🖼️ 내부 사진 2
     ],
     community: [                                  // 커뮤니티 탭 이미지
-      "images/community/fitness-optimized.jpg",   // 🖼️ 커뮤니티 사진 1
-      "images/community/golf-optimized.jpg",      // 🖼️ 커뮤니티 사진 2
-      "images/community/guset-optimized.jpg",     // 🖼️ 커뮤니티 사진 3
+      "images/community/fitness.jpg",             // 🖼️ 커뮤니티 사진 1
+      "images/community/golf.jpg",                // 🖼️ 커뮤니티 사진 2
+      "images/community/guset.jpg",               // 🖼️ 커뮤니티 사진 3
     ],
     view:      [                                  // 조망 탭 이미지
-      "images/view/city1-optimized.jpg",          // 🖼️ 조망 사진 1
+      "images/view/view.png",                     // 🖼️ 조망 사진 1
+      "images/view/view (2).png",                 // 🖼️ 조망 사진 2
     ],
   },
 
