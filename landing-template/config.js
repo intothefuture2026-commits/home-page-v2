@@ -45,8 +45,8 @@ const CONFIG = {
     bgImage:  "",                      // 🖼️ 히어로 배경 (슬라이드 1장일 때 사용)
     images: [                          // 🖼️ 슬라이드 이미지 배열
       {                                // 🖼️ 슬라이드 1: {day, night} 쌍 → crossfade
-        day:   "images/hero/main-hero1.jpg",
-        night: "images/hero/main-hero.jpg",
+        day:   "images/hero/main-hero1.png",
+        night: "images/hero/main-hero.png",
       },
     ],
     heroBenefits: [
@@ -60,7 +60,7 @@ const CONFIG = {
      모바일 전용 배너 (≤768px)
   ───────────────────────────── */
   mobBanner: {
-    image: "images/hero/main-hero-optimized.jpg", // 🖼️ 모바일 전용 배너 이미지 교체 가능
+    image: "images/hero/main-hero1.png", // 🖼️ 모바일 전용 배너 이미지 교체 가능
   },
 
   /* ─────────────────────────────
@@ -69,17 +69,17 @@ const CONFIG = {
   premiumPoints: [
     {
       title: "탁월한 입지",
-      image: "images/premium/point03.png",    // 🖼️ 포인트 이미지 1
+      image: "images/premium/point03.webm",   // 🖼️ 포인트 이미지 1
       video: "",                             // 🎬 mp4 또는 webm 경로 (비워두면 이미지만 표시)
     },
     {
       title: "풍부한 자연환경",
-      image: "images/premium/point02.png",    // 🖼️ 포인트 이미지 2
+      image: "images/premium/point02.webm",   // 🖼️ 포인트 이미지 2
       video: "",
     },
     {
       title: "우수한 학군",
-      image: "images/premium/point01.png",    // 🖼️ 포인트 이미지 3
+      image: "images/premium/point01.webm",   // 🖼️ 포인트 이미지 3
       video: "",
     },
   ],
@@ -153,8 +153,8 @@ const CONFIG = {
   ───────────────────────────── */
   galleryImages: {
     interior:  [                                  // 내부 탭 이미지
-      "images/interior/premium_interior.jpg",    // 🖼️ 내부 사진 1
-      "images/interior/premium_interior1.jpg",   // 🖼️ 내부 사진 2
+      "images/interior/premium_interior.png",    // 🖼️ 내부 사진 1
+      "images/interior/premium_interior1.png",   // 🖼️ 내부 사진 2
     ],
     community: [                                  // 커뮤니티 탭 이미지
       "images/community/fitness.jpg",             // 🖼️ 커뮤니티 사진 1
@@ -162,8 +162,8 @@ const CONFIG = {
       "images/community/guset.jpg",               // 🖼️ 커뮤니티 사진 3
     ],
     view:      [                                  // 조망 탭 이미지
-      "images/view/view.jpg",                     // 🖼️ 조망 사진 1
-      "images/view/view__2_.jpg",                 // 🖼️ 조망 사진 2
+      "images/view/view.png",                     // 🖼️ 조망 사진 1
+      "images/view/view (2).png",                 // 🖼️ 조망 사진 2
     ],
   },
 

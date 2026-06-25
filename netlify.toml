@@ -1,3 +1,7 @@
 [build]
   publish = "landing-template"
 
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

@@ -5,7 +5,7 @@ This folder is for social preview images used by `og:image` and `twitter:image`.
 ## Current file
 
 - `og-cover.jpg`
-  - Current source: copied from `../hero/main-hero-optimized.jpg`
+  - Current source: copied from `../hero/main-hero1.png`
   - Current usage: linked from `index.html` metadata
 
 ## Reuse pattern

@@ -1010,7 +1010,7 @@ function initScrollEffects() {
 ────────────────────────────────────────── */
 function initHeroSlider() {
   const track  = el('heroTrack');
-  const images = CONFIG?.hero?.images ?? ['images/hero/main-hero-optimized.jpg'];
+  const images = CONFIG?.hero?.images?.filter(Boolean) ?? ['images/hero/main-hero1.png'];
   const count  = images.length;
 
   for (let i = 0; i < count; i++) {
