@@ -45,8 +45,8 @@ const CONFIG = {
     bgImage:  "",                      // 🖼️ 히어로 배경 (슬라이드 1장일 때 사용)
     images: [                          // 🖼️ 슬라이드 이미지 배열
       {                                // 🖼️ 슬라이드 1: {day, night} 쌍 → crossfade
-        day:   "images/hero/main-hero1.png",
-        night: "images/hero/main-hero.png",
+        day:   "images/hero/main-hero1.jpg",
+        night: "images/hero/main-hero.jpg",
       },
     ],
     heroBenefits: [
@@ -153,8 +153,8 @@ const CONFIG = {
   ───────────────────────────── */
   galleryImages: {
     interior:  [                                  // 내부 탭 이미지
-      "images/interior/premium_interior.png",    // 🖼️ 내부 사진 1
-      "images/interior/premium_interior1.png",   // 🖼️ 내부 사진 2
+      "images/interior/premium_interior.jpg",    // 🖼️ 내부 사진 1
+      "images/interior/premium_interior1.jpg",   // 🖼️ 내부 사진 2
     ],
     community: [                                  // 커뮤니티 탭 이미지
       "images/community/fitness.jpg",             // 🖼️ 커뮤니티 사진 1
@@ -162,8 +162,8 @@ const CONFIG = {
       "images/community/guset.jpg",               // 🖼️ 커뮤니티 사진 3
     ],
     view:      [                                  // 조망 탭 이미지
-      "images/view/view.png",                     // 🖼️ 조망 사진 1
-      "images/view/view (2).png",                 // 🖼️ 조망 사진 2
+      "images/view/view.jpg",                     // 🖼️ 조망 사진 1
+      "images/view/view__2_.jpg",                 // 🖼️ 조망 사진 2
     ],
   },
 
