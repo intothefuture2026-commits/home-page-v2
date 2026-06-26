@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>방문 현황 관리자</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif; background: #f0f4f8; color: #1e293b; min-height: 100vh; }
+
+    /* ── 로그인 ── */
+    #loginSection { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 1rem; }
+    .login-card { background: #fff; border-radius: 14px; box-shadow: 0 6px 32px rgba(0,0,0,.13); padding: 2.75rem 2rem 2rem; width: 100%; max-width: 370px; text-align: center; }
+    .shield-icon { font-size: 3.2rem; margin-bottom: 1rem; }
+    .login-card h1 { font-size: 1.2rem; font-weight: 700; color: #1e3a5f; margin-bottom: .35rem; }
+    .login-card .site-name { font-size: .82rem; color: #94a3b8; margin-bottom: 1.75rem; }
+    .login-card input[type=password] { width: 100%; padding: .78rem 1rem; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: .95rem; outline: none; margin-bottom: .75rem; color: #1e293b; }
+    .login-card input[type=password]:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.15); }
+    .btn-login { width: 100%; padding: .78rem; background: #1d4ed8; color: #fff; border: none; border-radius: 8px; font-size: .95rem; font-weight: 600; cursor: pointer; transition: background .15s; }
+    .btn-login:hover { background: #1e40af; }
+    .btn-login:disabled { background: #93c5fd; cursor: not-allowed; }
+    .login-error { color: #ef4444; font-size: .83rem; margin-top: .8rem; }
+    .hidden { display: none !important; }
+
+    /* ── 대시보드 ── */
+    #dashboard { display: none; flex-direction: column; min-height: 100vh; }
+    .dash-header { background: #1e3a5f; color: #fff; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .75rem; }
+    .dash-title { font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: .45rem; }
+    .dash-header-right { display: flex; align-items: center; gap: .65rem; flex-wrap: wrap; }
+    input[type=date] { padding: .38rem .7rem; border: 1.5px solid rgba(255,255,255,.25); background: rgba(255,255,255,.1); color: #fff; border-radius: 6px; font-size: .88rem; cursor: pointer; }
+    input[type=date]::-webkit-calendar-picker-indicator { filter: invert(1) opacity(.7); }
+    .btn-sm { padding: .38rem .9rem; border-radius: 6px; font-size: .83rem; font-weight: 600; cursor: pointer; border: none; transition: background .15s; }
+    .btn-refresh { background: #3b82f6; color: #fff; }
+    .btn-refresh:hover { background: #2563eb; }
+    .btn-logout { background: transparent; color: rgba(255,255,255,.75); border: 1.5px solid rgba(255,255,255,.3); }
+    .btn-logout:hover { background: rgba(255,255,255,.1); color: #fff; }
+
+    .dash-main { flex: 1; padding: 1.5rem; max-width: 1000px; width: 100%; margin: 0 auto; }
+
+    /* ── 통계 카드 ── */
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-card { background: #fff; border-radius: 10px; padding: 1rem 1.25rem; box-shadow: 0 1px 6px rgba(0,0,0,.08); border-left: 4px solid #e2e8f0; }
+    .stat-card.blue { border-left-color: #3b82f6; }
+    .stat-card.green { border-left-color: #22c55e; }
+    .stat-card.amber { border-left-color: #f59e0b; }
+    .stat-card.red { border-left-color: #ef4444; }
+    .stat-label { font-size: .75rem; color: #64748b; margin-bottom: .3rem; font-weight: 500; }
+    .stat-value { font-size: 1.9rem; font-weight: 700; color: #1e293b; }
+    .stat-card.amber .stat-value { color: #b45309; }
+    .stat-card.red .stat-value { color: #b91c1c; }
+
+    /* ── 테이블 ── */
+    .table-wrap { background: #fff; border-radius: 10px; box-shadow: 0 1px 6px rgba(0,0,0,.08); overflow: hidden; }
+    .table-info { padding: .75rem 1.25rem; font-size: .82rem; color: #64748b; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; }
+    .legend { display: flex; gap: .75rem; align-items: center; font-size: .75rem; flex-wrap: wrap; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #f8fafc; padding: .65rem 1rem; font-size: .78rem; color: #475569; text-align: left; font-weight: 600; border-bottom: 2px solid #e2e8f0; white-space: nowrap; }
+    td { padding: .72rem 1rem; font-size: .875rem; border-bottom: 1px solid #f1f5f9; }
+    tr:last-child td { border-bottom: none; }
+    tr.row-normal { background: #fff; }
+    tr.row-warning { background: #fffbeb; }
+    tr.row-danger { background: #fef2f2; }
+    td code { font-family: 'SFMono-Regular', Consolas, monospace; font-size: .85rem; background: #f1f5f9; padding: .15rem .4rem; border-radius: 4px; }
+    .badge { display: inline-flex; align-items: center; gap: .25rem; padding: .18rem .55rem; border-radius: 99px; font-size: .72rem; font-weight: 600; white-space: nowrap; }
+    .badge-normal { background: #f0fdf4; color: #15803d; }
+    .badge-warning { background: #fef3c7; color: #92400e; }
+    .badge-danger { background: #fee2e2; color: #b91c1c; }
+    .empty-msg { text-align: center; padding: 3.5rem 1rem; color: #94a3b8; font-size: .9rem; }
+    #loadingMsg { text-align: center; padding: 3rem; color: #64748b; font-size: .9rem; }
+    #errorMsg { text-align: center; color: #ef4444; padding: 2rem; font-size: .9rem; }
+
+    @media (max-width: 600px) {
+      .dash-header { padding: .8rem 1rem; }
+      .dash-main { padding: 1rem; }
+      th, td { padding: .6rem .75rem; font-size: .8rem; }
+      .stat-value { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── 로그인 화면 ── -->
+<div id="loginSection">
+  <div class="login-card">
+    <div class="shield-icon">🛡️</div>
+    <h1>방문 현황 관리자</h1>
+    <p class="site-name">힐스테이트 수원 파크포레</p>
+    <form id="loginForm">
+      <input type="password" id="pwInput" placeholder="관리자 비밀번호" autocomplete="current-password" autofocus>
+      <button type="submit" class="btn-login" id="loginBtn">로그인</button>
+    </form>
+    <p id="loginError" class="login-error hidden">비밀번호가 올바르지 않습니다.</p>
+  </div>
+</div>
+
+<!-- ── 대시보드 ── -->
+<div id="dashboard">
+  <header class="dash-header">
+    <div class="dash-title">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M8 1L1.5 4V8c0 3.5 2.9 6.5 6.5 7 3.6-.5 6.5-3.5 6.5-7V4L8 1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M5.5 8l1.8 1.8L11 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      방문 현황 모니터링
+    </div>
+    <div class="dash-header-right">
+      <input type="date" id="dateInput" aria-label="날짜 선택">
+      <button class="btn-sm btn-refresh" id="btnRefresh">새로고침</button>
+      <button class="btn-sm btn-logout" id="btnLogout">로그아웃</button>
+    </div>
+  </header>
+
+  <main class="dash-main">
+    <p id="loadingMsg">데이터를 불러오는 중...</p>
+
+    <div id="dashContent" class="hidden">
+      <div class="stats-row">
+        <div class="stat-card blue">
+          <div class="stat-label">고유 IP 수</div>
+          <div class="stat-value" id="statIPs">—</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-label">총 방문 횟수</div>
+          <div class="stat-value" id="statTotal">—</div>
+        </div>
+        <div class="stat-card amber">
+          <div class="stat-label">주의 IP (3~5회)</div>
+          <div class="stat-value" id="statWarning">—</div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-label">의심 IP (6회+)</div>
+          <div class="stat-value" id="statDanger">—</div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-info">
+          <span id="tableHeader">로딩 중...</span>
+          <div class="legend">
+            <span><span class="legend-dot" style="background:#fff;border:1px solid #e2e8f0;"></span> 정상</span>
+            <span><span class="legend-dot" style="background:#fef3c7;"></span> 주의 (3~5회)</span>
+            <span><span class="legend-dot" style="background:#fee2e2;"></span> 의심 (6회+)</span>
+          </div>
+        </div>
+        <div id="tableBody"></div>
+      </div>
+    </div>
+
+    <p id="errorMsg" class="hidden">데이터를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</p>
+  </main>
+</div>
+
+<script>
+  var SESSION_KEY = 'admin_tok';
+
+  function getKSTDate() {
+    var now = new Date();
+    var kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+    return kst.toISOString().slice(0, 10);
+  }
+
+  function formatKST(isoStr) {
+    if (!isoStr) return '—';
+    try {
+      return new Date(isoStr).toLocaleString('ko-KR', {
+        timeZone: 'Asia/Seoul',
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+      });
+    } catch (e) { return isoStr; }
+  }
+
+  var dateInput = document.getElementById('dateInput');
+  dateInput.value = getKSTDate();
+  dateInput.max = getKSTDate();
+
+  function fetchData(pw, date) {
+    return fetch('/.netlify/functions/admin-visits?date=' + encodeURIComponent(date), {
+      headers: { 'Authorization': 'Bearer ' + pw }
+    }).then(function(resp) {
+      if (resp.status === 401) throw new Error('UNAUTHORIZED');
+      if (!resp.ok) throw new Error('SERVER_ERROR');
+      return resp.json();
+    });
+  }
+
+  function renderDashboard(data) {
+    var warnCount = data.rows.filter(function(r) { return r.count >= 3 && r.count < 6; }).length;
+    var dangerCount = data.rows.filter(function(r) { return r.count >= 6; }).length;
+
+    document.getElementById('statIPs').textContent = data.uniqueIPs;
+    document.getElementById('statTotal').textContent = data.totalVisits;
+    document.getElementById('statWarning').textContent = warnCount;
+    document.getElementById('statDanger').textContent = dangerCount;
+    document.getElementById('tableHeader').textContent =
+      data.date + ' 기준 · 고유 IP ' + data.uniqueIPs + '개 · 총 ' + data.totalVisits + '회 방문';
+
+    var tbody = document.getElementById('tableBody');
+    if (data.rows.length === 0) {
+      tbody.innerHTML = '<p class="empty-msg">해당 날짜의 방문 데이터가 없습니다.</p>';
+    } else {
+      var html = '<table><thead><tr>' +
+        '<th>#</th><th>IP 주소</th><th>방문 횟수</th><th>마지막 방문 (KST)</th><th>상태</th>' +
+        '</tr></thead><tbody>';
+      data.rows.forEach(function(row, i) {
+        var cls = 'row-normal', badgeCls = 'badge-normal', badgeText = '정상';
+        if (row.count >= 6) { cls = 'row-danger'; badgeCls = 'badge-danger'; badgeText = '의심'; }
+        else if (row.count >= 3) { cls = 'row-warning'; badgeCls = 'badge-warning'; badgeText = '주의'; }
+        html += '<tr class="' + cls + '">' +
+          '<td>' + (i + 1) + '</td>' +
+          '<td><code>' + escapeHtml(row.ip) + '</code></td>' +
+          '<td><strong>' + row.count + '</strong></td>' +
+          '<td>' + formatKST(row.lastSeen) + '</td>' +
+          '<td><span class="badge ' + badgeCls + '">' + badgeText + '</span></td>' +
+          '</tr>';
+      });
+      html += '</tbody></table>';
+      tbody.innerHTML = html;
+    }
+
+    document.getElementById('loadingMsg').classList.add('hidden');
+    document.getElementById('dashContent').classList.remove('hidden');
+    document.getElementById('errorMsg').classList.add('hidden');
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function loadDashboard() {
+    var pw = sessionStorage.getItem(SESSION_KEY);
+    var date = dateInput.value || getKSTDate();
+
+    document.getElementById('loadingMsg').classList.remove('hidden');
+    document.getElementById('dashContent').classList.add('hidden');
+    document.getElementById('errorMsg').classList.add('hidden');
+
+    fetchData(pw, date).then(function(data) {
+      renderDashboard(data);
+    }).catch(function(e) {
+      document.getElementById('loadingMsg').classList.add('hidden');
+      if (e.message === 'UNAUTHORIZED') { showLogin(); }
+      else { document.getElementById('errorMsg').classList.remove('hidden'); }
+    });
+  }
+
+  function showDashboard() {
+    document.getElementById('loginSection').classList.add('hidden');
+    document.getElementById('dashboard').style.display = 'flex';
+    loadDashboard();
+  }
+
+  function showLogin() {
+    document.getElementById('loginSection').classList.remove('hidden');
+    document.getElementById('dashboard').style.display = 'none';
+    sessionStorage.removeItem(SESSION_KEY);
+  }
+
+  // 세션 유지
+  if (sessionStorage.getItem(SESSION_KEY)) { showDashboard(); }
+
+  // 로그인
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var pw = document.getElementById('pwInput').value.trim();
+    if (!pw) return;
+    var btn = document.getElementById('loginBtn');
+    btn.textContent = '확인 중...';
+    btn.disabled = true;
+    document.getElementById('loginError').classList.add('hidden');
+
+    fetchData(pw, getKSTDate()).then(function() {
+      sessionStorage.setItem(SESSION_KEY, pw);
+      showDashboard();
+    }).catch(function(e) {
+      var errEl = document.getElementById('loginError');
+      errEl.textContent = e.message === 'UNAUTHORIZED'
+        ? '비밀번호가 올바르지 않습니다.'
+        : '서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.';
+      errEl.classList.remove('hidden');
+    }).finally(function() {
+      btn.textContent = '로그인';
+      btn.disabled = false;
+    });
+  });
+
+  document.getElementById('btnRefresh').addEventListener('click', loadDashboard);
+  document.getElementById('dateInput').addEventListener('change', loadDashboard);
+  document.getElementById('btnLogout').addEventListener('click', showLogin);
+</script>
+</body>
+</html>
