@@ -177,7 +177,7 @@
   dateInput.max = getKSTDate();
 
   function fetchData(pw, date) {
-    return fetch('/.netlify/functions/admin-visits?date=' + encodeURIComponent(date), {
+    return fetch('/api/admin-visits?date=' + encodeURIComponent(date), {
       headers: { 'Authorization': 'Bearer ' + pw }
     }).then(function(resp) {
       if (resp.status === 401) throw new Error('UNAUTHORIZED');

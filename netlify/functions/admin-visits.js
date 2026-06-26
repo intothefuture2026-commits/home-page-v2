@@ -1,26 +1,30 @@
-const { getStore } = require("@netlify/blobs");
+import { getStore } from "@netlify/blobs";
 
-// Set ADMIN_PASSWORD in Netlify dashboard → Site configuration → Environment variables
+// Netlify 대시보드 → Environment variables → ADMIN_PASSWORD 설정 권장
 const ADMIN_PW = process.env.ADMIN_PASSWORD || "adminpw2026!";
 
-exports.handler = async (event) => {
+export default async (req, context) => {
   const headers = {
     "Content-Type": "application/json",
     "Cache-Control": "no-store",
   };
 
-  // Expect Authorization: Bearer <password>
-  const auth = (event.headers.authorization || "").trim();
+  // Authorization: Bearer <password>
+  const auth = req.headers.get("authorization") || "";
   const pw = auth.startsWith("Bearer ") ? auth.slice(7) : auth;
 
   if (!pw || pw !== ADMIN_PW) {
-    return { statusCode: 401, headers, body: JSON.stringify({ error: "Unauthorized" }) };
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers,
+    });
   }
 
+  const url = new URL(req.url);
   const now = new Date();
   const kstNow = new Date(now.getTime() + 9 * 60 * 60 * 1000);
   const todayKey = kstNow.toISOString().slice(0, 10);
-  const dateKey = (event.queryStringParameters || {}).date || todayKey;
+  const dateKey = url.searchParams.get("date") || todayKey;
 
   try {
     const store = getStore("visit-logs");
@@ -33,12 +37,16 @@ exports.handler = async (event) => {
 
     const totalVisits = rows.reduce((sum, r) => sum + r.count, 0);
 
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({ date: dateKey, uniqueIPs: rows.length, totalVisits, rows }),
-    };
+    return new Response(
+      JSON.stringify({ date: dateKey, uniqueIPs: rows.length, totalVisits, rows }),
+      { status: 200, headers }
+    );
   } catch (err) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: err.message }) };
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers,
+    });
   }
 };
+
+export const config = { path: "/api/admin-visits" };

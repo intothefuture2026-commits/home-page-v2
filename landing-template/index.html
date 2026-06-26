@@ -1003,7 +1003,7 @@
 
   <script>
     // 방문 기록 (백그라운드, 방문자에게 미노출)
-    fetch('/.netlify/functions/track-visit', { method: 'POST', keepalive: true }).catch(function() {});
+    fetch('/api/track-visit', { method: 'POST', keepalive: true }).catch(function() {});
   </script>
   <script src="config.js"></script>
   <script src="script.js"></script>

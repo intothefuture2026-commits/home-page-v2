@@ -1,15 +1,14 @@
-const { getStore } = require("@netlify/blobs");
+import { getStore } from "@netlify/blobs";
 
-exports.handler = async (event) => {
+export default async (req, context) => {
   const ip =
-    event.headers["x-nf-client-connection-ip"] ||
-    (event.headers["x-forwarded-for"] || "").split(",")[0].trim() ||
+    context.ip ||
+    (req.headers.get("x-forwarded-for") || "").split(",")[0].trim() ||
     "unknown";
 
   const now = new Date();
-  // KST = UTC+9
   const kstNow = new Date(now.getTime() + 9 * 60 * 60 * 1000);
-  const dateKey = kstNow.toISOString().slice(0, 10); // YYYY-MM-DD
+  const dateKey = kstNow.toISOString().slice(0, 10); // YYYY-MM-DD (KST)
 
   try {
     const store = getStore("visit-logs");
@@ -25,5 +24,7 @@ exports.handler = async (event) => {
     console.error("track-visit error:", err.message);
   }
 
-  return { statusCode: 204, body: "" };
+  return new Response(null, { status: 204 });
 };
+
+export const config = { path: "/api/track-visit" };
