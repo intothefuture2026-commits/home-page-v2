@@ -824,7 +824,19 @@
         <span class="bb-num" id="bottomCallPhone">1844-1588</span>
       </span>
     </a>
-    <!-- 오른쪽: 방문예약 -->
+
+    <!-- 가운데: 카카오톡 상담 -->
+    <a class="bottom-bar-btn bb-kakao" id="bottomKakaoBtn" href="https://open.kakao.com/o/sAqCsQah" target="_blank" rel="noopener noreferrer" aria-label="카카오톡 상담">
+      <svg class="bb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/>
+      </svg>
+      <span class="bb-text">
+        <span class="bb-sub">카카오톡</span>
+        <span class="bb-num">상담</span>
+      </span>
+    </a>
+
+    <!-- 오른쪽: 방문예약 (기능 유지) -->
     <a class="bottom-bar-btn bb-visit" href="#visit" aria-label="방문예약">
       <svg class="bb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
@@ -1007,5 +1019,14 @@
   </script>
   <script src="config.js"></script>
   <script src="script.js"></script>
+  <script type="text/javascript" src="//wcs.pstatic.net/wcslog.js"></script>
+  <script type="text/javascript">
+  if (!wcs_add) var wcs_add = {};
+  wcs_add["wa"] = "1a2b538aeabb5b0";
+
+  if (window.wcs) {
+      wcs_do();
+  }
+  </script>
 </body>
 </html>
