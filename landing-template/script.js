@@ -79,7 +79,22 @@ function buildNavMenu() {
     navList.appendChild(li);
 
     const mLi = li.cloneNode(true);
-    mLi.querySelector('a').addEventListener('click', closeMobileMenu);
+    mLi.querySelector('a').addEventListener('click', e => {
+      e.preventDefault();
+      closeMobileMenu();
+
+      const target = document.querySelector(item.href);
+      if (!target) return;
+
+      const navInner = document.querySelector('.nav-inner');
+      const navHeight = navInner ? navInner.offsetHeight : 60;
+      const targetTop = target.getBoundingClientRect().top + window.scrollY - navHeight - 12;
+
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+        history.replaceState(null, '', item.href);
+      });
+    });
     mobileList.appendChild(mLi);
   });
 }
