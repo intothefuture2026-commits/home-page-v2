@@ -2003,6 +2003,12 @@ section { padding: 88px 0; }
   color: #fff;
   border-right: 1px solid rgba(255,255,255,0.1);
 }
+/* ── 카카오톡 버튼: 카카오 브랜드 옐로우 ── */
+.bb-kakao {
+  background: #fee500;
+  color: #3c1e1e;
+  border-right: 1px solid rgba(0,0,0,0.06);
+}
 /* ── 방문예약 버튼: purple→magenta ── */
 .bb-visit {
   background: linear-gradient(140deg, #7a1ec2 0%, #c21e8a 100%);
