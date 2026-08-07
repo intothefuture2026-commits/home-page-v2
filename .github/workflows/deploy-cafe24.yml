@@ -1,0 +1,66 @@
+name: Deploy to Cafe24
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "landing-template/**"
+      - ".github/workflows/deploy-cafe24.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cafe24-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Upload website files
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Check Cafe24 settings
+        shell: bash
+        env:
+          FTP_SERVER: ${{ secrets.CAFE24_FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.CAFE24_FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.CAFE24_FTP_PASSWORD }}
+          FTP_SERVER_DIR: ${{ secrets.CAFE24_FTP_SERVER_DIR }}
+        run: |
+          set -eu
+          for setting in FTP_SERVER FTP_USERNAME FTP_PASSWORD FTP_SERVER_DIR; do
+            if [ -z "${!setting}" ]; then
+              echo "::error::$setting is not configured in the production environment."
+              exit 1
+            fi
+          done
+
+          case "$FTP_SERVER_DIR" in
+            */) ;;
+            *)
+              echo "::error::FTP_SERVER_DIR must end with a slash (/)."
+              exit 1
+              ;;
+          esac
+
+      - name: Upload landing page to Cafe24
+        uses: SamKirkland/FTP-Deploy-Action@a51268f67f6605236975928ae28b0f7e9971d50a # v4.3.6
+        with:
+          server: ${{ secrets.CAFE24_FTP_SERVER }}
+          username: ${{ secrets.CAFE24_FTP_USERNAME }}
+          password: ${{ secrets.CAFE24_FTP_PASSWORD }}
+          protocol: ftp
+          port: 21
+          local-dir: ./landing-template/
+          server-dir: ${{ secrets.CAFE24_FTP_SERVER_DIR }}
+          state-name: .ftp-deploy-sync-state.json
+          dangerous-clean-slate: false
+          log-level: standard
+          timeout: 120000
