@@ -672,30 +672,9 @@ function initContactForm() {
     if (phoneCombined) phoneCombined.value = `${p1}-${p2}-${p3}`;
     if (privacyConsent) privacyConsent.value = agree ? 'agreed' : 'not-agreed';
 
-    const formData = new FormData(form);
-    const payload = Object.fromEntries(formData.entries());
     if (submitBtn) submitBtn.disabled = true;
     setStatus('방문예약 신청을 전송하고 있습니다...');
-
-    fetch(endpoint, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'application/json', Accept: 'application/json' } })
-      .then(async response => {
-        if (!response.ok) {
-          let msg = '전송 중 오류가 발생했습니다.';
-          try {
-            const d = await response.json();
-            if (d?.errors?.[0]?.message) msg = d.errors[0].message;
-          } catch (_) {}
-          throw new Error(msg);
-        }
-        setStatus('방문예약 신청이 접수되었습니다. 빠르게 연락드리겠습니다.', 'success');
-        alert(`방문예약 신청이 접수되었습니다.\n${p1}-${p2}-${p3} 번호로 빠르게 연락드리겠습니다.`);
-        form.reset();
-      })
-      .catch(error => {
-        setStatus(error.message || '전송에 실패했습니다. 잠시 후 다시 시도해주세요.', 'error');
-        alert(error.message || '전송에 실패했습니다. 잠시 후 다시 시도해주세요.');
-      })
-      .finally(() => { if (submitBtn) submitBtn.disabled = false; });
+    form.submit();
   });
 }
 
@@ -775,30 +754,9 @@ function initRegisterForm() {
 
     if (combined) combined.value = `${p1}-${p2}-${p3}`;
 
-    const formData = new FormData(form);
-    const payload = Object.fromEntries(formData.entries());
     if (submitBtn) submitBtn.disabled = true;
     setStatus('등록 중입니다...');
-
-    fetch(endpoint, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'application/json', Accept: 'application/json' } })
-      .then(async response => {
-        if (!response.ok) {
-          let msg = '전송 중 오류가 발생했습니다.';
-          try {
-            const d = await response.json();
-            if (d?.errors?.[0]?.message) msg = d.errors[0].message;
-          } catch (_) {}
-          throw new Error(msg);
-        }
-        setStatus('관심고객 등록이 완료되었습니다. 우선 상담 혜택을 드리겠습니다!', 'success');
-        alert(`관심고객 등록이 완료되었습니다.\n${p1}-${p2}-${p3} 번호로 빠르게 연락드리겠습니다.`);
-        form.reset();
-      })
-      .catch(error => {
-        setStatus(error.message || '전송에 실패했습니다. 잠시 후 다시 시도해주세요.', 'error');
-        alert(error.message || '전송에 실패했습니다. 잠시 후 다시 시도해주세요.');
-      })
-      .finally(() => { if (submitBtn) submitBtn.disabled = false; });
+    form.submit();
   });
 }
 
@@ -876,30 +834,9 @@ function initRegisterFormHero() {
 
     if (combined) combined.value = `${p1}-${p2}-${p3}`;
 
-    const formData = new FormData(form);
-    const payload = Object.fromEntries(formData.entries());
     if (submitBtn) submitBtn.disabled = true;
     setStatus('등록 중입니다...');
-
-    fetch(endpoint, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'application/json', Accept: 'application/json' } })
-      .then(async response => {
-        if (!response.ok) {
-          let msg = '전송 중 오류가 발생했습니다.';
-          try {
-            const d = await response.json();
-            if (d?.errors?.[0]?.message) msg = d.errors[0].message;
-          } catch (_) {}
-          throw new Error(msg);
-        }
-        setStatus('등록이 완료되었습니다. 빠르게 연락드리겠습니다!', 'success');
-        alert(`관심고객 등록이 완료되었습니다.\n${p1}-${p2}-${p3} 번호로 빠르게 연락드리겠습니다.`);
-        form.reset();
-      })
-      .catch(error => {
-        setStatus(error.message || '전송에 실패했습니다. 잠시 후 다시 시도해주세요.', 'error');
-        alert(error.message || '전송에 실패했습니다. 잠시 후 다시 시도해주세요.');
-      })
-      .finally(() => { if (submitBtn) submitBtn.disabled = false; });
+    form.submit();
   });
 }
 
