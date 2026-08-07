@@ -228,7 +228,7 @@ const CONFIG = {
   /* ─────────────────────────────
      하단 고정 버튼바
   ───────────────────────────── */
-  kakaoUrl: "https://pf.kakao.com/_MdSjn/chat",  // 카카오톡 채팅 URL
+  kakaoUrl: "https://pf.kakao.com/_xlhxdfX/chat",  // 카카오톡 채널 1:1 채팅 URL
 
   bottomBar: {
     callLabel:  "전화 상담",

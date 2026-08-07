@@ -35,6 +35,7 @@ function applyConfig() {
   setHref('navPhoneBtn', telHref);
   setHref('mobilePhoneBtn', telHref);
   setHref('bottomCallBtn', telHref);
+  setHref('bottomKakaoBtn', C.kakaoUrl);
   setHref('floatCallBtn', telHref);
   setHref('ibCallBtn', telHref);
   setHref('ibCallBtn2', telHref);
