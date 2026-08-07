@@ -26,7 +26,7 @@ function applyConfig() {
   const phone = C.phone;
   const telHref = 'tel:' + phone.replace(/-/g, '');
 
-  document.title = C.propertyName + ' 분양안내';
+  document.title = C.propertyName + ' 분양·입주 안내 | 분양하우스';
 
   el('navLogo').textContent = C.propertyName;
 
@@ -617,14 +617,15 @@ function initDeferredSections() {
    방문예약 폼 (#visit)
 ────────────────────────────────────────── */
 function initContactForm() {
-  const form          = el('contactForm');
-  const phone1        = el('phone1');
-  const phone2        = el('phone2');
-  const phone3        = el('phone3');
-  const phoneCombined = el('phoneCombined');
-  const privacyConsent = el('privacyConsent');
-  const submitBtn     = el('contactSubmitBtn');
-  const status        = el('formStatus');
+  const form              = el('contactForm');
+  const phone1            = el('phone1');
+  const phone2            = el('phone2');
+  const phone3            = el('phone3');
+  const phoneCombined     = el('phoneCombined');
+  const phoneCombinedInput = el('phoneCombinedInput');
+  const privacyConsent    = el('privacyConsent');
+  const submitBtn         = el('contactSubmitBtn');
+  const status            = el('formStatus');
 
   if (!form || !phone1 || !phone2 || !phone3) return;
 
@@ -646,12 +647,12 @@ function initContactForm() {
     phone3.value = phone3.value.replace(/\D/g, '');
   });
 
+  watchCombinedPhoneInput(phoneCombinedInput, phone1, phone2, phone3);
+
   form.addEventListener('submit', e => {
     e.preventDefault();
     const name  = el('inputName').value.trim();
-    const p1    = phone1.value.trim();
-    const p2    = phone2.value.trim();
-    const p3    = phone3.value.trim();
+    const [p1, p2, p3] = normalizePhoneParts({ combinedInput: phoneCombinedInput, part1: phone1, part2: phone2, part3: phone3 });
     const agree = el('agreeAll').checked;
     const endpoint = (form.getAttribute('action') || '').trim();
 
@@ -672,10 +673,11 @@ function initContactForm() {
     if (privacyConsent) privacyConsent.value = agree ? 'agreed' : 'not-agreed';
 
     const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
     if (submitBtn) submitBtn.disabled = true;
     setStatus('방문예약 신청을 전송하고 있습니다...');
 
-    fetch(endpoint, { method: 'POST', body: formData, headers: { Accept: 'application/json' } })
+    fetch(endpoint, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'application/json', Accept: 'application/json' } })
       .then(async response => {
         if (!response.ok) {
           let msg = '전송 중 오류가 발생했습니다.';
@@ -720,13 +722,14 @@ function initTermsToggle() {
    관심고객등록 폼 (#register)
 ────────────────────────────────────────── */
 function initRegisterForm() {
-  const form     = el('registerForm');
-  const rp1      = el('regPhone1');
-  const rp2      = el('regPhone2');
-  const rp3      = el('regPhone3');
-  const combined = el('regPhoneCombined');
-  const submitBtn = el('registerSubmitBtn');
-  const status   = el('registerStatus');
+  const form              = el('registerForm');
+  const rp1               = el('regPhone1');
+  const rp2               = el('regPhone2');
+  const rp3               = el('regPhone3');
+  const phoneCombinedInput = el('regPhoneCombinedInput');
+  const combined          = el('regPhoneCombined');
+  const submitBtn         = el('registerSubmitBtn');
+  const status            = el('registerStatus');
 
   if (!form || !rp1 || !rp2 || !rp3) return;
 
@@ -748,12 +751,12 @@ function initRegisterForm() {
     rp3.value = rp3.value.replace(/\D/g, '');
   });
 
+  watchCombinedPhoneInput(phoneCombinedInput, rp1, rp2, rp3);
+
   form.addEventListener('submit', e => {
     e.preventDefault();
     const name  = el('regName').value.trim();
-    const p1    = rp1.value.trim();
-    const p2    = rp2.value.trim();
-    const p3    = rp3.value.trim();
+    const [p1, p2, p3] = normalizePhoneParts({ combinedInput: phoneCombinedInput, part1: rp1, part2: rp2, part3: rp3 });
     const agree = el('regAgree').checked;
     const endpoint = (form.getAttribute('action') || '').trim();
 
@@ -773,10 +776,11 @@ function initRegisterForm() {
     if (combined) combined.value = `${p1}-${p2}-${p3}`;
 
     const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
     if (submitBtn) submitBtn.disabled = true;
     setStatus('등록 중입니다...');
 
-    fetch(endpoint, { method: 'POST', body: formData, headers: { Accept: 'application/json' } })
+    fetch(endpoint, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'application/json', Accept: 'application/json' } })
       .then(async response => {
         if (!response.ok) {
           let msg = '전송 중 오류가 발생했습니다.';
@@ -821,13 +825,14 @@ function initRegisterTermsToggle() {
    히어로 하단 관심고객 등록 폼 (복제)
 ────────────────────────────────────────── */
 function initRegisterFormHero() {
-  const form      = el('registerFormHero');
-  const rp1       = el('regPhone1Hero');
-  const rp2       = el('regPhone2Hero');
-  const rp3       = el('regPhone3Hero');
-  const combined  = el('regPhoneCombinedHero');
-  const submitBtn = el('registerSubmitBtnHero');
-  const status    = el('registerStatusHero');
+  const form              = el('registerFormHero');
+  const rp1               = el('regPhone1Hero');
+  const rp2               = el('regPhone2Hero');
+  const rp3               = el('regPhone3Hero');
+  const phoneCombinedInput = el('regPhoneCombinedInputHero');
+  const combined          = el('regPhoneCombinedHero');
+  const submitBtn         = el('registerSubmitBtnHero');
+  const status            = el('registerStatusHero');
 
   if (!form || !rp1 || !rp2 || !rp3) return;
 
@@ -849,12 +854,12 @@ function initRegisterFormHero() {
     rp3.value = rp3.value.replace(/\D/g, '');
   });
 
+  watchCombinedPhoneInput(phoneCombinedInput, rp1, rp2, rp3);
+
   form.addEventListener('submit', e => {
     e.preventDefault();
     const name     = el('regNameHero').value.trim();
-    const p1       = rp1.value.trim();
-    const p2       = rp2.value.trim();
-    const p3       = rp3.value.trim();
+    const [p1, p2, p3] = normalizePhoneParts({ combinedInput: phoneCombinedInput, part1: rp1, part2: rp2, part3: rp3 });
     const agree    = el('regAgreeHero').checked;
     const endpoint = (form.getAttribute('action') || '').trim();
 
@@ -872,10 +877,11 @@ function initRegisterFormHero() {
     if (combined) combined.value = `${p1}-${p2}-${p3}`;
 
     const formData = new FormData(form);
+    const payload = Object.fromEntries(formData.entries());
     if (submitBtn) submitBtn.disabled = true;
     setStatus('등록 중입니다...');
 
-    fetch(endpoint, { method: 'POST', body: formData, headers: { Accept: 'application/json' } })
+    fetch(endpoint, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'application/json', Accept: 'application/json' } })
       .then(async response => {
         if (!response.ok) {
           let msg = '전송 중 오류가 발생했습니다.';
@@ -919,6 +925,42 @@ function initRegisterTermsToggleHero() {
 /* ──────────────────────────────────────────
    미디어 더보기 / 접기
 ────────────────────────────────────────── */
+function normalizePhoneParts({ combinedInput, part1, part2, part3 }) {
+  const combinedRaw = combinedInput?.value.trim().replace(/\D/g, '') || '';
+  if (combinedRaw.length >= 9) {
+    const digits = combinedRaw.slice(0, 11);
+    const p1 = digits.slice(0, 3);
+    let p2;
+    let p3;
+
+    if (digits.length === 10) {
+      p2 = digits.slice(3, 6);
+      p3 = digits.slice(6);
+    } else {
+      p2 = digits.slice(3, 7);
+      p3 = digits.slice(7);
+    }
+
+    if (part1) part1.value = p1;
+    if (part2) part2.value = p2;
+    if (part3) part3.value = p3;
+    return [p1, p2, p3];
+  }
+
+  const p1 = part1?.value.trim() || '';
+  const p2 = part2?.value.trim() || '';
+  const p3 = part3?.value.trim() || '';
+  return [p1, p2, p3];
+}
+
+function watchCombinedPhoneInput(combinedInput, part1, part2, part3) {
+  if (!combinedInput) return;
+  combinedInput.addEventListener('input', () => {
+    combinedInput.value = combinedInput.value.replace(/\D/g, '');
+    normalizePhoneParts({ combinedInput, part1, part2, part3 });
+  });
+}
+
 function initMedia() {
   document.querySelectorAll('.media-more-btn').forEach(btn => {
     btn.addEventListener('click', () => {
