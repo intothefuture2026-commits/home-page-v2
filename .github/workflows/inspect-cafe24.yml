@@ -10,14 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
-      - name: List FTP folders without changing files
+      - name: Inspect FTP current directory without changing files
         shell: bash
         env:
           FTP_SERVER: ${{ secrets.CAFE24_FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.CAFE24_FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.CAFE24_FTP_PASSWORD }}
         run: |
-          for path in / /www/ /landing-template/ /hillstate-suwon/; do
-            echo "===== $path ====="
-            curl --silent --show-error --user "$FTP_USERNAME:$FTP_PASSWORD" --list-only "ftp://$FTP_SERVER$path" || true
-          done
+          curl --verbose --user "$FTP_USERNAME:$FTP_PASSWORD" "ftp://$FTP_SERVER/"
