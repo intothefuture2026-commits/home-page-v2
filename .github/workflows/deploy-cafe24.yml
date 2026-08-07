@@ -32,7 +32,7 @@ jobs:
           FTP_SERVER: ${{ secrets.CAFE24_FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.CAFE24_FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.CAFE24_FTP_PASSWORD }}
-          FTP_SERVER_DIR: ${{ secrets.CAFE24_FTP_SERVER_DIR }}
+          FTP_SERVER_DIR: /www/hillstate-suwon/
         run: |
           set -eu
           for setting in FTP_SERVER FTP_USERNAME FTP_PASSWORD FTP_SERVER_DIR; do
@@ -50,6 +50,20 @@ jobs:
               ;;
           esac
 
+      - name: Ensure Cafe24 target directory exists
+        shell: bash
+        env:
+          FTP_SERVER: ${{ secrets.CAFE24_FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.CAFE24_FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.CAFE24_FTP_PASSWORD }}
+          FTP_SERVER_DIR: /www/hillstate-suwon/
+        run: |
+          marker="$(mktemp)"
+          curl --fail --silent --show-error --ftp-create-dirs \
+            --user "$FTP_USERNAME:$FTP_PASSWORD" \
+            --upload-file "$marker" \
+            "ftp://$FTP_SERVER${FTP_SERVER_DIR}.deploy-ready"
+          rm -f "$marker"
       - name: Upload landing page to Cafe24
         uses: SamKirkland/FTP-Deploy-Action@a51268f67f6605236975928ae28b0f7e9971d50a # v4.3.6
         with:
@@ -59,7 +73,7 @@ jobs:
           protocol: ftp
           port: 21
           local-dir: ./landing-template/
-          server-dir: ${{ secrets.CAFE24_FTP_SERVER_DIR }}
+          server-dir: /www/hillstate-suwon/
           state-name: .ftp-deploy-sync-state.json
           dangerous-clean-slate: false
           log-level: standard
