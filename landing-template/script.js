@@ -43,8 +43,8 @@ function applyConfig() {
 
   buildNavMenu();
 
-  el('heroBadge').textContent = '선착순 분양중 · 상담 가능';
-  el('heroTitle').innerHTML = '힐스테이트 <span class="hero-title-gold">수원파크포레</span>,만의 <span class="hero-title-dark">특별한 계약조건!</span>';
+  el('heroBadge').textContent = '선착순 5세대 · 상담 가능';
+  el('heroTitle').innerHTML = '힐스테이트 <span class="hero-title-gold">수원파크포레</span>만의 <span class="hero-title-dark">특별한 계약조건!</span>';
   el('heroSub').textContent = '수원의 중심에서,';
 
   buildHeroBenefitBtns();
@@ -106,7 +106,7 @@ function buildHeroBenefitBtns() {
   cta.innerHTML = '';
   [
     '발코니 무상지원',
-    '잔금유예 1~2억',
+    '잔금 일부 유예',
     '+ α 계약자혜택 제공',
   ].forEach(value => {
     const a = document.createElement('a');
@@ -284,7 +284,7 @@ function buildLocationPoints() {
       label: '교통환경 | 우수',
       items: [
         '철도 및 고속도로 등 우수한 도로교통망',
-        '화서역(1호선, 신분당선(예정)), 수원역(1호선, KTX, GTX-C(28년 예정) 등)',
+        '화서역(1호선), 수원역(1호선·수인분당선·KTX), 신분당선 구운역(가칭) 및 GTX-C 추진 중(일정 변동 가능)',
         '서측 과천봉담고속화도로, 평택파주고속도로 위치로 이용 수월',
       ],
     },
