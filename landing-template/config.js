@@ -228,7 +228,9 @@ const CONFIG = {
   /* ─────────────────────────────
      하단 고정 버튼바
   ───────────────────────────── */
-  kakaoUrl: "https://pf.kakao.com/_xlhxdfX/chat",  // 카카오톡 채널 1:1 채팅 URL
+  kakaoUrl:     "https://pf.kakao.com/_xlhxdfX/chat",  // 카카오톡 채널 1:1 채팅 URL
+  callGateUrl:  "call-gate.html",                       // 네이버 전화 전환 추적 페이지
+  kakaoGateUrl: "kakao-gate.html",                      // 네이버 카카오 전환 추적 페이지
 
   bottomBar: {
     callLabel:  "전화 상담",

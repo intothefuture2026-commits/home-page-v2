@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
 function applyConfig() {
   const C = CONFIG;
   const phone = C.phone;
-  const telHref = 'tel:' + phone.replace(/-/g, '');
+  const callHref = C.callGateUrl || ('tel:' + phone.replace(/-/g, ''));
+  const kakaoHref = C.kakaoGateUrl || C.kakaoUrl;
 
   document.title = C.propertyName + ' 분양·입주 안내 | 분양하우스';
 
@@ -32,13 +33,13 @@ function applyConfig() {
 
   el('navPhoneNum').textContent    = phone;
   el('mobilePhoneNum').textContent = phone;
-  setHref('navPhoneBtn', telHref);
-  setHref('mobilePhoneBtn', telHref);
-  setHref('bottomCallBtn', telHref);
-  setHref('bottomKakaoBtn', C.kakaoUrl);
-  setHref('floatCallBtn', telHref);
-  setHref('ibCallBtn', telHref);
-  setHref('ibCallBtn2', telHref);
+  setHref('navPhoneBtn', callHref);
+  setHref('mobilePhoneBtn', callHref);
+  setHref('bottomCallBtn', callHref);
+  setHref('bottomKakaoBtn', kakaoHref);
+  setHref('floatCallBtn', callHref);
+  setHref('ibCallBtn', callHref);
+  setHref('ibCallBtn2', callHref);
 
   buildNavMenu();
 
@@ -51,7 +52,7 @@ function applyConfig() {
   el('bottomCallPhone').textContent = phone;
 
   // 모바일 전용 배너 CTA + 이미지
-  setHref('mobCallBtn', telHref);
+  setHref('mobCallBtn', callHref);
   el('mobCallPhone').textContent = phone;
   const mobImg = el('mobBannerImg');
   if (mobImg && C.mobBanner?.image) mobImg.src = C.mobBanner.image;
