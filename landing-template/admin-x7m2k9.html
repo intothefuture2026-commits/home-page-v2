@@ -35,6 +35,17 @@
     .btn-refresh:hover { background: #2563eb; }
     .btn-logout { background: transparent; color: rgba(255,255,255,.75); border: 1.5px solid rgba(255,255,255,.3); }
     .btn-logout:hover { background: rgba(255,255,255,.1); color: #fff; }
+    .btn-csv { background: #16a34a; color: #fff; }
+    .btn-csv:hover { background: #15803d; }
+    .btn-csv:disabled { background: #86efac; cursor: not-allowed; }
+
+    /* ── 탭 ── */
+    .tab-bar { display: flex; gap: .25rem; padding: 0 1.5rem; background: #1e3a5f; border-top: 1px solid rgba(255,255,255,.08); }
+    .tab-btn { background: transparent; border: none; color: rgba(255,255,255,.6); padding: .7rem 1rem; font-size: .85rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; }
+    .tab-btn.active { color: #fff; border-bottom-color: #3b82f6; }
+    .inq-controls { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .inq-controls input[type=date] { border-color: #cbd5e1; background: #fff; color: #1e293b; }
+    .inq-controls input[type=date]::-webkit-calendar-picker-indicator { filter: none; }
 
     .dash-main { flex: 1; padding: 1.5rem; max-width: 1000px; width: 100%; margin: 0 auto; }
 
@@ -112,43 +123,72 @@
     </div>
   </header>
 
+  <nav class="tab-bar">
+    <button type="button" class="tab-btn active" id="tabVisits">방문 현황</button>
+    <button type="button" class="tab-btn" id="tabInquiries">문의 내역</button>
+  </nav>
+
   <main class="dash-main">
-    <p id="loadingMsg">데이터를 불러오는 중...</p>
+    <div id="visitsPane">
+      <p id="loadingMsg">데이터를 불러오는 중...</p>
 
-    <div id="dashContent" class="hidden">
-      <div class="stats-row">
-        <div class="stat-card blue">
-          <div class="stat-label">고유 IP 수</div>
-          <div class="stat-value" id="statIPs">—</div>
-        </div>
-        <div class="stat-card green">
-          <div class="stat-label">총 방문 횟수</div>
-          <div class="stat-value" id="statTotal">—</div>
-        </div>
-        <div class="stat-card amber">
-          <div class="stat-label">주의 IP (3~5회)</div>
-          <div class="stat-value" id="statWarning">—</div>
-        </div>
-        <div class="stat-card red">
-          <div class="stat-label">의심 IP (6회+)</div>
-          <div class="stat-value" id="statDanger">—</div>
-        </div>
-      </div>
-
-      <div class="table-wrap">
-        <div class="table-info">
-          <span id="tableHeader">로딩 중...</span>
-          <div class="legend">
-            <span><span class="legend-dot" style="background:#fff;border:1px solid #e2e8f0;"></span> 정상</span>
-            <span><span class="legend-dot" style="background:#fef3c7;"></span> 주의 (3~5회)</span>
-            <span><span class="legend-dot" style="background:#fee2e2;"></span> 의심 (6회+)</span>
+      <div id="dashContent" class="hidden">
+        <div class="stats-row">
+          <div class="stat-card blue">
+            <div class="stat-label">고유 IP 수</div>
+            <div class="stat-value" id="statIPs">—</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-label">총 방문 횟수</div>
+            <div class="stat-value" id="statTotal">—</div>
+          </div>
+          <div class="stat-card amber">
+            <div class="stat-label">주의 IP (3~5회)</div>
+            <div class="stat-value" id="statWarning">—</div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-label">의심 IP (6회+)</div>
+            <div class="stat-value" id="statDanger">—</div>
           </div>
         </div>
-        <div id="tableBody"></div>
+
+        <div class="table-wrap">
+          <div class="table-info">
+            <span id="tableHeader">로딩 중...</span>
+            <div class="legend">
+              <span><span class="legend-dot" style="background:#fff;border:1px solid #e2e8f0;"></span> 정상</span>
+              <span><span class="legend-dot" style="background:#fef3c7;"></span> 주의 (3~5회)</span>
+              <span><span class="legend-dot" style="background:#fee2e2;"></span> 의심 (6회+)</span>
+            </div>
+          </div>
+          <div id="tableBody"></div>
+        </div>
       </div>
+
+      <p id="errorMsg" class="hidden">데이터를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</p>
     </div>
 
-    <p id="errorMsg" class="hidden">데이터를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</p>
+    <div id="inquiriesPane" class="hidden">
+      <div class="inq-controls">
+        <input type="date" id="inqDateInput" aria-label="날짜 선택">
+        <button class="btn-sm btn-refresh" id="btnInqRefresh">새로고침</button>
+        <button class="btn-sm btn-refresh" id="btnInqAll">전체 기간 보기</button>
+        <button class="btn-sm btn-csv" id="btnInqCsv">CSV 다운로드</button>
+      </div>
+
+      <p id="inqLoadingMsg">데이터를 불러오는 중...</p>
+
+      <div id="inqContent" class="hidden">
+        <div class="table-wrap">
+          <div class="table-info">
+            <span id="inqTableHeader">로딩 중...</span>
+          </div>
+          <div id="inqTableBody"></div>
+        </div>
+      </div>
+
+      <p id="inqErrorMsg" class="hidden">데이터를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.</p>
+    </div>
   </main>
 </div>
 
@@ -291,6 +331,124 @@
   document.getElementById('btnRefresh').addEventListener('click', loadDashboard);
   document.getElementById('dateInput').addEventListener('change', loadDashboard);
   document.getElementById('btnLogout').addEventListener('click', showLogin);
+
+  /* ── 문의 내역 탭 ── */
+  var INQ_FORM_TYPE_LABELS = {
+    'interest-register': '관심고객 등록',
+    'interest-register-hero': '관심고객 등록',
+    'visit-reservation': '방문예약'
+  };
+  var INQ_STATUS_LABELS = { pending: '대기', sent: '발송완료', failed: '발송실패' };
+  var INQ_STATUS_BADGE = { pending: 'badge-warning', sent: 'badge-normal', failed: 'badge-danger' };
+
+  var inqDateInput = document.getElementById('inqDateInput');
+  inqDateInput.value = getKSTDate();
+  inqDateInput.max = getKSTDate();
+  var inqShowAll = false;
+  var inqLoaded = false;
+
+  function switchTab(tab) {
+    document.getElementById('visitsPane').classList.toggle('hidden', tab !== 'visits');
+    document.getElementById('inquiriesPane').classList.toggle('hidden', tab !== 'inquiries');
+    document.getElementById('tabVisits').classList.toggle('active', tab === 'visits');
+    document.getElementById('tabInquiries').classList.toggle('active', tab === 'inquiries');
+  }
+
+  document.getElementById('tabVisits').addEventListener('click', function() { switchTab('visits'); });
+  document.getElementById('tabInquiries').addEventListener('click', function() {
+    switchTab('inquiries');
+    if (!inqLoaded) { inqLoaded = true; loadInquiries(); }
+  });
+
+  function fetchInquiries(pw, date, showAll, format) {
+    var params = [];
+    if (!showAll && date) params.push('date=' + encodeURIComponent(date));
+    if (format) params.push('format=' + encodeURIComponent(format));
+    var qs = params.length ? ('?' + params.join('&')) : '';
+    return fetch('/api/admin-inquiries' + qs, { headers: { 'Authorization': 'Bearer ' + pw } })
+      .then(function(resp) {
+        if (resp.status === 401) throw new Error('UNAUTHORIZED');
+        if (!resp.ok) throw new Error('SERVER_ERROR');
+        return resp;
+      });
+  }
+
+  function renderInquiries(data) {
+    document.getElementById('inqTableHeader').textContent =
+      (inqShowAll ? '전체 기간' : inqDateInput.value) + ' 기준 · 총 ' + data.count + '건';
+
+    var tbody = document.getElementById('inqTableBody');
+    if (data.rows.length === 0) {
+      tbody.innerHTML = '<p class="empty-msg">문의 데이터가 없습니다.</p>';
+    } else {
+      var html = '<table><thead><tr>' +
+        '<th>접수시각</th><th>문의유형</th><th>이름</th><th>연락처</th><th>방문희망일</th><th>방문희망시간</th><th>SMS상태</th>' +
+        '</tr></thead><tbody>';
+      data.rows.forEach(function(r) {
+        var badgeCls = INQ_STATUS_BADGE[r.smsStatus] || 'badge-normal';
+        var badgeText = INQ_STATUS_LABELS[r.smsStatus] || r.smsStatus;
+        html += '<tr>' +
+          '<td>' + formatKST(r.receivedAt) + '</td>' +
+          '<td>' + escapeHtml(INQ_FORM_TYPE_LABELS[r.formType] || r.formType) + '</td>' +
+          '<td>' + escapeHtml(r.name) + '</td>' +
+          '<td><code>' + escapeHtml(r.phone) + '</code></td>' +
+          '<td>' + escapeHtml(r.visitDate || '—') + '</td>' +
+          '<td>' + escapeHtml(r.visitTime || '—') + '</td>' +
+          '<td><span class="badge ' + badgeCls + '">' + badgeText + '</span></td>' +
+          '</tr>';
+      });
+      html += '</tbody></table>';
+      tbody.innerHTML = html;
+    }
+
+    document.getElementById('inqLoadingMsg').classList.add('hidden');
+    document.getElementById('inqContent').classList.remove('hidden');
+    document.getElementById('inqErrorMsg').classList.add('hidden');
+  }
+
+  function loadInquiries() {
+    var pw = sessionStorage.getItem(SESSION_KEY);
+    document.getElementById('inqLoadingMsg').classList.remove('hidden');
+    document.getElementById('inqContent').classList.add('hidden');
+    document.getElementById('inqErrorMsg').classList.add('hidden');
+
+    fetchInquiries(pw, inqDateInput.value, inqShowAll)
+      .then(function(resp) { return resp.json(); })
+      .then(renderInquiries)
+      .catch(function(e) {
+        document.getElementById('inqLoadingMsg').classList.add('hidden');
+        if (e.message === 'UNAUTHORIZED') { showLogin(); }
+        else { document.getElementById('inqErrorMsg').classList.remove('hidden'); }
+      });
+  }
+
+  document.getElementById('btnInqRefresh').addEventListener('click', function() { inqShowAll = false; loadInquiries(); });
+  document.getElementById('btnInqAll').addEventListener('click', function() { inqShowAll = true; loadInquiries(); });
+  document.getElementById('inqDateInput').addEventListener('change', function() { inqShowAll = false; loadInquiries(); });
+
+  document.getElementById('btnInqCsv').addEventListener('click', function() {
+    var pw = sessionStorage.getItem(SESSION_KEY);
+    var btn = document.getElementById('btnInqCsv');
+    btn.disabled = true;
+
+    fetchInquiries(pw, inqDateInput.value, inqShowAll, 'csv')
+      .then(function(resp) { return resp.blob(); })
+      .then(function(blob) {
+        var objUrl = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = objUrl;
+        a.download = 'inquiries-' + (inqShowAll ? 'all' : inqDateInput.value) + '.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(objUrl);
+      })
+      .catch(function(e) {
+        if (e.message === 'UNAUTHORIZED') { showLogin(); }
+        else { alert('CSV 다운로드에 실패했습니다. 잠시 후 다시 시도해 주세요.'); }
+      })
+      .finally(function() { btn.disabled = false; });
+  });
 </script>
 </body>
 </html>

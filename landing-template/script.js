@@ -24,8 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
 function applyConfig() {
   const C = CONFIG;
   const phone = C.phone;
-  const callHref = C.callGateUrl || ('tel:' + phone.replace(/-/g, ''));
-  const kakaoHref = C.kakaoGateUrl || C.kakaoUrl;
+  // 중간 안내 페이지(call-gate.html/kakao-gate.html) 없이 바로 연결합니다.
+  // 전환 추적은 bindDirectContactTracking()이 클릭 시 비동기로 별도 처리합니다.
+  const callHref = 'tel:' + phone.replace(/-/g, '');
+  const kakaoHref = C.kakaoUrl;
 
   document.title = C.propertyName + ' 분양·입주 안내 | 분양하우스';
 
@@ -40,6 +42,7 @@ function applyConfig() {
   setHref('floatCallBtn', callHref);
   setHref('ibCallBtn', callHref);
   setHref('ibCallBtn2', callHref);
+  setHref('footerCallLink', callHref);
 
   buildNavMenu();
 
@@ -65,6 +68,46 @@ function applyConfig() {
   }
 
   // 푸터는 정적 HTML로 직접 작성됨
+
+  bindDirectContactTracking();
+}
+
+/* ──────────────────────────────────────────
+   전화·카카오 버튼 직접 연결 + 네이버 전환 추적
+   - 중간 안내 페이지(call-gate.html/kakao-gate.html)를 거치지 않고
+     href(tel:/카카오 URL)로 즉시 이동합니다. preventDefault를 쓰지 않으므로
+     클릭 이벤트 자체가 곧바로 기본 동작(전화 연결/카카오 이동)을 수행합니다.
+   - 네이버 전환 추적(wcs.trans)은 같은 클릭 이벤트 안에서 동기적으로,
+     하지만 non-blocking(비동기 beacon)으로 호출되어 이동을 지연시키지 않습니다.
+   - 추적 스크립트가 없거나 실패해도(광고 차단 등) 전화/카카오 연결에는
+     영향이 없도록 항상 try/catch로 감쌉니다.
+────────────────────────────────────────── */
+function fireNaverConversion(conversionType) {
+  try {
+    if (window.wcs && typeof window.wcs.trans === 'function') {
+      window.wcs.trans({ type: conversionType });
+    }
+  } catch (err) {
+    // 추적 실패가 전화/카카오 연결을 막지 않도록 무시
+  }
+}
+
+function bindDirectContactTracking() {
+  const CALL_BTN_IDS = [
+    'navPhoneBtn', 'mobilePhoneBtn', 'mobCallBtn',
+    'ibCallBtn', 'ibCallBtn2', 'bottomCallBtn', 'floatCallBtn',
+    'footerCallLink',
+  ];
+  const KAKAO_BTN_IDS = ['bottomKakaoBtn'];
+
+  CALL_BTN_IDS.forEach(id => {
+    const btn = el(id);
+    if (btn) btn.addEventListener('click', () => fireNaverConversion('custom001'));
+  });
+  KAKAO_BTN_IDS.forEach(id => {
+    const btn = el(id);
+    if (btn) btn.addEventListener('click', () => fireNaverConversion('custom002'));
+  });
 }
 
 function buildNavMenu() {
