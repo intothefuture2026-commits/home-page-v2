@@ -141,6 +141,10 @@ button { cursor: pointer; }
   border: 2px solid transparent;
   white-space: nowrap;
 }
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 .btn-primary  { background: var(--primary); color: var(--white); border-color: var(--primary); }
 .btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(254,93,52,0.35); }
 .btn-outline  { background: transparent; color: var(--white); border-color: rgba(255,255,255,0.7); }

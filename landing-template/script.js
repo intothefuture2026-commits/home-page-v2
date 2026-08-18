@@ -631,6 +631,25 @@ function initDeferredSections() {
 }
 
 /* ──────────────────────────────────────────
+   문의 폼 공통 전송 (SOLAPI 문자 알림 API)
+────────────────────────────────────────── */
+// Cafe24(정적 호스팅)와 Netlify(SOLAPI 함수)의 도메인이 다르므로 절대주소로 호출합니다.
+const CONTACT_API_ENDPOINT = (CONFIG.contactApiBaseUrl || '') + '/api/contact';
+
+async function submitContactRequest(payload) {
+  try {
+    const res = await fetch(CONTACT_API_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    return res.ok;
+  } catch (err) {
+    return false;
+  }
+}
+
+/* ──────────────────────────────────────────
    방문예약 폼 (#visit)
 ────────────────────────────────────────── */
 function initContactForm() {
@@ -666,12 +685,11 @@ function initContactForm() {
 
   watchCombinedPhoneInput(phoneCombinedInput, phone1, phone2, phone3);
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async e => {
     e.preventDefault();
     const name  = el('inputName').value.trim();
     const [p1, p2, p3] = normalizePhoneParts({ combinedInput: phoneCombinedInput, part1: phone1, part2: phone2, part3: phone3 });
     const agree = el('agreeAll').checked;
-    const endpoint = (form.getAttribute('action') || '').trim();
 
     setStatus('');
 
@@ -680,18 +698,31 @@ function initContactForm() {
       alert('연락처를 정확히 입력해주세요.'); phone1.focus(); return;
     }
     if (!agree) { alert('개인정보 수집 및 이용에 동의해주세요.'); el('agreeAll').focus(); return; }
-    if (!endpoint || endpoint.includes('YOUR_FORMSPREE_FORM_ID')) {
-      setStatus('Formspree 폼 ID를 먼저 입력해주세요.', 'error');
-      alert('Formspree 폼 ID를 먼저 입력해주세요.');
-      return;
-    }
 
     if (phoneCombined) phoneCombined.value = `${p1}-${p2}-${p3}`;
     if (privacyConsent) privacyConsent.value = agree ? 'agreed' : 'not-agreed';
 
     if (submitBtn) submitBtn.disabled = true;
     setStatus('방문예약 신청을 전송하고 있습니다...');
-    form.submit();
+
+    const gotcha = form.querySelector('[name="_gotcha"]');
+    const ok = await submitContactRequest({
+      formType: 'visit-reservation',
+      name,
+      phone: `${p1}-${p2}-${p3}`,
+      agreeAll: agree,
+      visitDate: el('visitDate') ? el('visitDate').value : '',
+      visitTime: el('visitTime') ? el('visitTime').value : '',
+      _gotcha: gotcha ? gotcha.value : '',
+    });
+
+    if (ok) {
+      setStatus('문의가 정상적으로 접수되었습니다.', 'success');
+      form.reset();
+    } else {
+      setStatus('문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.', 'error');
+    }
+    if (submitBtn) submitBtn.disabled = false;
   });
 }
 
@@ -749,12 +780,11 @@ function initRegisterForm() {
 
   watchCombinedPhoneInput(phoneCombinedInput, rp1, rp2, rp3);
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async e => {
     e.preventDefault();
     const name  = el('regName').value.trim();
     const [p1, p2, p3] = normalizePhoneParts({ combinedInput: phoneCombinedInput, part1: rp1, part2: rp2, part3: rp3 });
     const agree = el('regAgree').checked;
-    const endpoint = (form.getAttribute('action') || '').trim();
 
     setStatus('');
 
@@ -763,17 +793,28 @@ function initRegisterForm() {
       alert('연락처를 정확히 입력해주세요.'); rp1.focus(); return;
     }
     if (!agree) { alert('개인정보 수집 및 이용에 동의해주세요.'); el('regAgree').focus(); return; }
-    if (!endpoint || endpoint.includes('YOUR_FORMSPREE_FORM_ID')) {
-      setStatus('Formspree 폼 ID를 먼저 입력해주세요.', 'error');
-      alert('Formspree 폼 ID를 먼저 입력해주세요.');
-      return;
-    }
 
     if (combined) combined.value = `${p1}-${p2}-${p3}`;
 
     if (submitBtn) submitBtn.disabled = true;
     setStatus('등록 중입니다...');
-    form.submit();
+
+    const gotcha = form.querySelector('[name="_gotcha"]');
+    const ok = await submitContactRequest({
+      formType: 'interest-register',
+      name,
+      phone: `${p1}-${p2}-${p3}`,
+      agreeAll: agree,
+      _gotcha: gotcha ? gotcha.value : '',
+    });
+
+    if (ok) {
+      setStatus('문의가 정상적으로 접수되었습니다.', 'success');
+      form.reset();
+    } else {
+      setStatus('문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.', 'error');
+    }
+    if (submitBtn) submitBtn.disabled = false;
   });
 }
 
@@ -831,12 +872,11 @@ function initRegisterFormHero() {
 
   watchCombinedPhoneInput(phoneCombinedInput, rp1, rp2, rp3);
 
-  form.addEventListener('submit', e => {
+  form.addEventListener('submit', async e => {
     e.preventDefault();
     const name     = el('regNameHero').value.trim();
     const [p1, p2, p3] = normalizePhoneParts({ combinedInput: phoneCombinedInput, part1: rp1, part2: rp2, part3: rp3 });
     const agree    = el('regAgreeHero').checked;
-    const endpoint = (form.getAttribute('action') || '').trim();
 
     setStatus('');
 
@@ -845,15 +885,28 @@ function initRegisterFormHero() {
       alert('연락처를 정확히 입력해주세요.'); rp1.focus(); return;
     }
     if (!agree) { alert('개인정보 수집 및 이용에 동의해주세요.'); el('regAgreeHero').focus(); return; }
-    if (!endpoint || endpoint.includes('YOUR_FORMSPREE_FORM_ID')) {
-      setStatus('Formspree 폼 ID를 먼저 입력해주세요.', 'error'); return;
-    }
 
     if (combined) combined.value = `${p1}-${p2}-${p3}`;
 
     if (submitBtn) submitBtn.disabled = true;
     setStatus('등록 중입니다...');
-    form.submit();
+
+    const gotcha = form.querySelector('[name="_gotcha"]');
+    const ok = await submitContactRequest({
+      formType: 'interest-register-hero',
+      name,
+      phone: `${p1}-${p2}-${p3}`,
+      agreeAll: agree,
+      _gotcha: gotcha ? gotcha.value : '',
+    });
+
+    if (ok) {
+      setStatus('문의가 정상적으로 접수되었습니다.', 'success');
+      form.reset();
+    } else {
+      setStatus('문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.', 'error');
+    }
+    if (submitBtn) submitBtn.disabled = false;
   });
 }
 
