@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>상담 신청 완료 | 힐스테이트 수원파크포레</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" href="images/og/og-cover.jpg" />
+  <style>
+    @font-face {
+      font-family: 'Paperlogy';
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+      src: url('https://framerusercontent.com/assets/5KEs6th84SArgCnoMfsblYRz2g.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'Paperlogy';
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+      src: url('https://framerusercontent.com/assets/lbMH2iYmyrPQ49LGEcV0RA2Vxxo.woff2') format('woff2');
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-title: #343a40;
+      --color-body:  #495057;
+      --color-sub:   #868e96;
+      --color-point: #fe5d34;
+      --color-dark:  #101f3a;
+      --font: 'Paperlogy', sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: var(--font);
+      background: #101f3a;
+      background: radial-gradient(circle at 50% 20%, #1a2f52 0%, #101f3a 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 48px 32px 36px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      opacity: 0;
+      transform: scale(0.92);
+      animation: popIn 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes popIn {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .check-wrap {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 24px;
+      border-radius: 50%;
+      background: rgba(254, 93, 52, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .check-wrap svg {
+      width: 38px;
+      height: 38px;
+    }
+
+    .check-wrap circle {
+      fill: var(--color-point);
+    }
+
+    .check-wrap path {
+      stroke: #ffffff;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--color-title);
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    p.desc {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--color-sub);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .btn-home {
+      display: inline-block;
+      width: 100%;
+      padding: 15px 0;
+      background: var(--color-dark);
+      color: #ffffff;
+      font-family: var(--font);
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 10px;
+      transition: opacity 0.15s ease;
+    }
+
+    .btn-home:hover,
+    .btn-home:active {
+      opacity: 0.88;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 40px 24px 28px;
+        border-radius: 16px;
+      }
+
+      h1 {
+        font-size: 19px;
+      }
+
+      p.desc {
+        font-size: 14px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card" role="status" aria-live="polite">
+    <div class="check-wrap">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="12"></circle>
+        <path d="M7 12.5l3 3 7-7"></path>
+      </svg>
+    </div>
+    <h1>상담 신청이 완료되었습니다</h1>
+    <p class="desc">빠른 시일 내에 담당자가 연락드리겠습니다.<br />감사합니다.</p>
+    <a class="btn-home" href="./">홈으로 돌아가기</a>
+  </div>
+</body>
+</html>

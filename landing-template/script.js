@@ -760,11 +760,11 @@ function initContactForm() {
     });
 
     if (ok) {
-      setStatus('문의가 정상적으로 접수되었습니다.', 'success');
-      form.reset();
-    } else {
-      setStatus('문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.', 'error');
+      fireNaverConversion('custom003');
+      window.location.href = 'thank-you.html';
+      return;
     }
+    setStatus('문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.', 'error');
     if (submitBtn) submitBtn.disabled = false;
   });
 }
@@ -852,11 +852,11 @@ function initRegisterForm() {
     });
 
     if (ok) {
-      setStatus('문의가 정상적으로 접수되었습니다.', 'success');
-      form.reset();
-    } else {
-      setStatus('문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.', 'error');
+      fireNaverConversion('custom003');
+      window.location.href = 'thank-you.html';
+      return;
     }
+    setStatus('문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.', 'error');
     if (submitBtn) submitBtn.disabled = false;
   });
 }
@@ -944,11 +944,11 @@ function initRegisterFormHero() {
     });
 
     if (ok) {
-      setStatus('문의가 정상적으로 접수되었습니다.', 'success');
-      form.reset();
-    } else {
-      setStatus('문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.', 'error');
+      fireNaverConversion('custom003');
+      window.location.href = 'thank-you.html';
+      return;
     }
+    setStatus('문의 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.', 'error');
     if (submitBtn) submitBtn.disabled = false;
   });
 }
