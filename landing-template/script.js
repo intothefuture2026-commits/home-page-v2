@@ -1168,13 +1168,7 @@ function initPopup() {
 
   const closeBtn     = document.getElementById('popupClose');
   const hideTodayBtn = document.getElementById('popupHideToday');
-  const track        = document.getElementById('popupTrack');
-  const dots         = document.querySelectorAll('.popup-dot');
-  const prevBtn      = document.getElementById('popupPrev');
-  const nextBtn      = document.getElementById('popupNext');
-  const total        = dots.length;
   const hideKey      = 'popupHiddenUntil';
-  let current        = 0;
   let opened         = false;
 
   function getHideUntil() {
@@ -1188,27 +1182,15 @@ function initPopup() {
     window.localStorage.setItem(hideKey, String(tomorrow.getTime()));
   }
 
-  function loadPopupImages() {
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const targets  = overlay.querySelectorAll((isMobile ? '.popup-mobile' : '.popup-pc') + ' img[data-src]');
-    targets.forEach(img => { if (!img.getAttribute('src')) img.src = img.dataset.src; });
-  }
-
-  function goTo(n) {
-    current = (n + total) % total;
-    const slides    = track.querySelectorAll('.popup-slide img[data-src]');
-    const currentImg = slides[current];
-    if (currentImg && !currentImg.getAttribute('src')) currentImg.src = currentImg.dataset.src;
-    track.style.transform = `translateX(-${current * 100}%)`;
-    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  function loadPopupImage() {
+    const img = overlay.querySelector('.popup-single img[data-src]');
+    if (img && !img.getAttribute('src')) img.src = img.dataset.src;
   }
 
   function openPopup() {
     if (opened || isHiddenToday()) return;
     opened = true;
-    current = 0;
-    loadPopupImages();
-    goTo(0);
+    loadPopupImage();
     overlay.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
   }
@@ -1219,8 +1201,6 @@ function initPopup() {
     document.body.style.overflow = '';
   }
 
-  prevBtn.addEventListener('click', () => goTo(current - 1));
-  nextBtn.addEventListener('click', () => goTo(current + 1));
   closeBtn.addEventListener('click', closePopup);
   if (hideTodayBtn) hideTodayBtn.addEventListener('click', () => { hideUntilTomorrow(); closePopup(); });
   overlay.addEventListener('click', e => { if (e.target === overlay) closePopup(); });
