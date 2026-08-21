@@ -39,6 +39,7 @@ function applyConfig() {
   setHref('mobilePhoneBtn', callHref);
   setHref('bottomCallBtn', callHref);
   setHref('bottomKakaoBtn', kakaoHref);
+  setHref('topBannerSmsBtn', kakaoHref);
   setHref('floatCallBtn', callHref);
   setHref('ibCallBtn', callHref);
   setHref('ibCallBtn2', callHref);
@@ -96,9 +97,9 @@ function bindDirectContactTracking() {
   const CALL_BTN_IDS = [
     'navPhoneBtn', 'mobilePhoneBtn', 'mobCallBtn',
     'ibCallBtn', 'ibCallBtn2', 'bottomCallBtn', 'floatCallBtn',
-    'footerCallLink',
+    'footerCallLink', 'topBannerCallBtn',
   ];
-  const KAKAO_BTN_IDS = ['bottomKakaoBtn'];
+  const KAKAO_BTN_IDS = ['bottomKakaoBtn', 'topBannerSmsBtn'];
 
   CALL_BTN_IDS.forEach(id => {
     const btn = el(id);
