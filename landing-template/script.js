@@ -48,7 +48,7 @@ function applyConfig() {
   buildNavMenu();
 
   el('heroBadge').textContent = '선착순 5세대 · 상담 가능';
-  el('heroTitle').textContent = '33평보다 44평이 더 저렴하다면 ?';
+  el('heroTitle').innerHTML = '33평보다 44평이 더<br>저렴하다면 ?';
   el('heroSub').textContent = '4년전 분양가 그대로 만나는';
 
   buildHeroBenefitBtns();
