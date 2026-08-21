@@ -50,6 +50,7 @@ function applyConfig() {
   el('heroBadge').textContent = '선착순 5세대 · 상담 가능';
   el('heroTitle').innerHTML = '33평보다 44평이 더<br>저렴하다면 ?';
   el('heroSub').textContent = '4년전 분양가 그대로 만나는';
+  el('heroBrand').textContent = C.propertyName;
 
   buildHeroBenefitBtns();
 

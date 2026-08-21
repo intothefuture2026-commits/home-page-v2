@@ -566,23 +566,6 @@ section { padding: 88px 0; }
   text-align: center;
 }
 
-.hero-breadcrumb {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 12px;
-  color: rgba(255, 255, 255, 0.86);
-  font-size: 14px;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
-}
-
-.hero-breadcrumb a {
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
 /* 뱃지/라벨 — 글래스형 */
 .hero-badge {
   display: inline-block;
@@ -626,6 +609,20 @@ section { padding: 88px 0; }
   filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.45));
   opacity: 0;
   animation: heroFadeUp 1.15s ease-out 0.35s forwards;
+}
+
+/* 브랜드명 — 대제목(저렴하다면 ?)보다 5% 크게, 연한갈색 */
+.hero-brand {
+  font-size: 67px;
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-top: 10px;
+  margin-bottom: 0;
+  color: #c19a6b;
+  text-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  animation: heroFadeUp 1.15s ease-out 0.55s forwards;
 }
 
 .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
@@ -2283,6 +2280,7 @@ section { padding: 88px 0; }
   .hero-body { padding-top: 20vh; }
   .hero-sub   { font-size: 24px; }
   .hero-title { font-size: 52px; }
+  .hero-brand { font-size: 55px; margin-top: 8px; }
 }
 
 /* 모바일 (≤ 768px): 3단계 */
@@ -2314,6 +2312,7 @@ section { padding: 88px 0; }
   .hero-body  { padding-top: 18vh; }
   .hero-sub   { font-size: 20px; margin-bottom: 12px; }
   .hero-title { font-size: 40px; }
+  .hero-brand { font-size: 42px; margin-top: 6px; }
 
   /* 히어로 콘텐츠 */
   .hero-cta { flex-direction: row; gap: 8px; }
@@ -2527,6 +2526,12 @@ section { padding: 88px 0; }
     line-height: 1.12;
     word-break: keep-all;
   }
+  .hero-brand {
+    font-size: clamp(29px, 7.9vw, 42px);
+    line-height: 1.12;
+    margin-top: 6px;
+    word-break: keep-all;
+  }
   .hero-badge { font-size: 14px; padding: 7px 16px; letter-spacing: 0.08em; }
   .hero-bottom-strip {
     bottom: 34px;
@@ -2628,6 +2633,7 @@ section { padding: 88px 0; }
   .hero-body { padding-top: 9vh; }
   .hero-sub { font-size: 16px; }
   .hero-title { font-size: clamp(24px, 8.2vw, 36px); }
+  .hero-brand { font-size: clamp(25px, 8.6vw, 38px); margin-top: 5px; }
   .hero-bottom-strip .hero-cta { width: min(100%, 170px); max-width: 170px; gap: 4px; }
   .hero-benefit-btn {
     min-height: 0;
