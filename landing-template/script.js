@@ -1206,8 +1206,7 @@ function initPopup() {
   overlay.addEventListener('click', e => { if (e.target === overlay) closePopup(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
 
-  const delay = window.matchMedia('(max-width: 768px)').matches ? 4500 : 3000;
-  if (!isHiddenToday()) window.setTimeout(openPopup, delay);
+  if (!isHiddenToday()) openPopup();
 }
 
 /* ──────────────────────────────────────────
