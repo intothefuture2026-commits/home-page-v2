@@ -151,9 +151,9 @@ const CONFIG = {
      갤러리 탭
   ───────────────────────────── */
   galleryTabs: [
-    { id: "interior",  label: "내부"    },
+    { id: "interior",  label: "단지내부" },
     { id: "community", label: "커뮤니티" },
-    { id: "view",      label: "조망"    },
+    { id: "view",      label: "주변환경" },
   ],
 
   /* ─────────────────────────────
@@ -162,18 +162,17 @@ const CONFIG = {
      - 빈 배열이면 플레이스홀더 표시
   ───────────────────────────── */
   galleryImages: {
-    interior:  [                                  // 내부 탭 이미지
-      "images/interior/premium_interior.png",    // 🖼️ 내부 사진 1
-      "images/interior/premium_interior1.png",   // 🖼️ 내부 사진 2
+    interior:  [                                  // 단지내부 탭 이미지
+      "images/interior/premium_interior1.png",   // 🖼️ 단지내부 사진 1
     ],
     community: [                                  // 커뮤니티 탭 이미지
       "images/community/fitness.jpg",             // 🖼️ 커뮤니티 사진 1
       "images/community/golf.jpg",                // 🖼️ 커뮤니티 사진 2
-      "images/community/guset.jpg",               // 🖼️ 커뮤니티 사진 3
+      "images/community/guset.png",                // 🖼️ 커뮤니티 사진 3
     ],
-    view:      [                                  // 조망 탭 이미지
-      "images/view/view.png",                     // 🖼️ 조망 사진 1
-      "images/view/view (2).png",                 // 🖼️ 조망 사진 2
+    view:      [                                  // 주변환경 탭 이미지
+      "images/view/view.png",                     // 🖼️ 주변환경 사진 1
+      "images/view/view (2).png",                 // 🖼️ 주변환경 사진 2
     ],
   },
 

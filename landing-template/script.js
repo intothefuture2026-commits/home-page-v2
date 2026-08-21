@@ -208,22 +208,22 @@ function buildPremiumCards() {
     {
       title: '입지환경 | 양호',
       desc: '동측 공원 및 북측 구운지구, 서호지구 개발로 입지 우상향',
-      video: 'images/premium/point01.webm',
+      image: 'images/premium/point01.png',
     },
     {
       title: '교통환경 | 양호',
       desc: '철도 및 고속도로 등 우수한 도로교통망',
-      video: 'images/premium/point02.webm',
+      image: 'images/premium/point02.png',
     },
     {
       title: '교육환경 | 양호',
       desc: '도보통학 가능한 학세권 입지로 교육여건 양호',
-      video: 'images/premium/point03.webm',
+      image: 'images/premium/point03.png',
     },
     {
       title: '생활편의 | 양호',
       desc: '대형마트, 백화점 및 복합쇼핑몰 인근 위치로 생활인프라 풍부',
-      video: 'images/premium/point04.webm',
+      image: 'images/premium/point04.png',
     },
   ];
 
@@ -231,24 +231,17 @@ function buildPremiumCards() {
     const card = document.createElement('div');
     card.className = 'premium-card';
 
-    // 미디어 박스
+    // 미디어 박스 — 원본 이미지 비율이 제각각이어도 4:3 박스에 맞춰 균일하게 표시 (object-fit: cover)
     const media = document.createElement('div');
     media.className = 'card-media';
 
-    // video 요소: createElement 방식으로 muted 속성 신뢰성 확보 (모바일 자동재생)
-    const video = document.createElement('video');
-    video.className   = 'card-media-video';
-    video.autoplay    = true;
-    video.muted       = true;   // 프로퍼티로 설정해야 iOS/Android에서 확실히 음소거
-    video.loop        = true;
-    video.playsInline = true;
-    video.setAttribute('playsinline', '');  // iOS 호환
-    video.setAttribute('disablepictureinpicture', '');
-    const source = document.createElement('source');
-    source.src  = pt.video;
-    source.type = 'video/webm';
-    video.appendChild(source);
-    media.appendChild(video);
+    const img = document.createElement('img');
+    img.className   = 'card-media-img';
+    img.src         = pt.image;
+    img.alt         = pt.title;
+    img.loading     = 'lazy';
+    img.decoding    = 'async';
+    media.appendChild(img);
 
     // 텍스트 영역
     const body = document.createElement('div');
@@ -264,20 +257,6 @@ function buildPremiumCards() {
   });
 
   grid.dataset.ready = 'true';
-
-  // iOS 등 자동재생 정책 대응: IntersectionObserver로 뷰포트 진입 시 play() 강제 호출
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      const v = entry.target;
-      if (entry.isIntersecting) {
-        v.play().catch(() => {});
-      } else {
-        v.pause();
-      }
-    });
-  }, { threshold: 0.25 });
-
-  grid.querySelectorAll('video').forEach(v => observer.observe(v));
 }
 
 /* ──────────────────────────────────────────

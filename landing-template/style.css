@@ -1174,9 +1174,14 @@ section { padding: 88px 0; }
   aspect-ratio: 16/7;
 }
 
+/* 커뮤니티 마지막 사진: 세로 비율이 짧아 좌우 여백이 생기므로 꽉 채워 표시 */
+.gallery-grid[data-tab="community"] .gallery-item:last-child img {
+  object-fit: cover;
+}
+
 .gallery-item img {
   width: 100%; height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   transition: transform 0.5s ease;
 }
@@ -3806,5 +3811,46 @@ section { padding: 88px 0; }
   .bottom-bar {
     display: none !important;
   }
+}
+
+/* ══════════════════════════════════════════
+   이미지 프로모션 배너 (이벤트 배너 / 탑배너)
+   · 배경/텍스트가 이미지에 포함된 통짜 배너를 섹션 사이에 끼워 넣는 공용 컴포넌트
+   · 원본 비율을 유지한 채 컨테이너 폭에 맞춰 축소만 되고, 절대 잘리거나 늘어나지 않음
+══════════════════════════════════════════ */
+.promo-banner {
+  padding: 40px 0;
+  background: var(--white);
+}
+.promo-banner .container {
+  max-width: 1160px;
+}
+.promo-banner-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.promo-banner-link {
+  display: block;
+  border-radius: 10px;
+  overflow: hidden;
+  line-height: 0;
+  box-shadow: 0 8px 24px rgba(16, 31, 58, 0.14);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.promo-banner-link:hover,
+.promo-banner-link:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(16, 31, 58, 0.2);
+}
+.promo-banner-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .promo-banner { padding: 26px 0; }
+  .promo-banner-link { border-radius: 8px; }
 }
 
