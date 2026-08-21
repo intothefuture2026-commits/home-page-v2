@@ -48,8 +48,8 @@ function applyConfig() {
   buildNavMenu();
 
   el('heroBadge').textContent = '선착순 5세대 · 상담 가능';
-  el('heroTitle').innerHTML = '힐스테이트 <span class="hero-title-gold">수원파크포레</span>만의 <span class="hero-title-dark">특별한 계약조건!</span>';
-  el('heroSub').textContent = '수원의 중심에서,';
+  el('heroTitle').textContent = '33평보다 44평이 더 저렴하다면 ?';
+  el('heroSub').textContent = '4년전 분양가 그대로 만나는';
 
   buildHeroBenefitBtns();
 
