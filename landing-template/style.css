@@ -407,8 +407,8 @@ section { padding: 88px 0; }
 .mob-promo { display: none !important; }
 
 @media (max-width: 480px) {
-  .mob-strip-headline { font-size: 13px; }
-  .mob-strip-benef    { font-size: 11px; }
+  .mob-strip-headline { font-size: 14.3px; }
+  .mob-strip-benef    { font-size: 12.1px; }
   .mob-strip-disc     { font-size: 7.7px; }
   .mob-cta-num      { font-size: 16px; }
   .mob-cta-label    { font-size: 14px; }
@@ -569,14 +569,12 @@ section { padding: 88px 0; }
 /* 뱃지/라벨 — 글래스형 */
 .hero-badge {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: rgba(255, 255, 255, 0.92);
+  background: #d0021b;
+  color: #ffe600;
   padding: 8px 22px;
   border-radius: 40px;
-  font-size: 18px;
-  font-weight: var(--fw-medium);
+  font-size: 19px;
+  font-weight: 800;
   line-height: var(--lh-heading);
   letter-spacing: 0.15em;
   border: 1px solid rgba(255, 255, 255, 0.35);
@@ -673,7 +671,7 @@ section { padding: 88px 0; }
   align-items: center;
   justify-content: center;
   min-height: 58px;
-  padding: 10px 14px;
+  padding: 10px 8px;
   background: linear-gradient(160deg, #fffcf4 0%, #f4e8ce 100%);
   border-radius: 14px;
   border: 1.5px solid rgba(185,148,74,0.55);
@@ -701,7 +699,7 @@ section { padding: 88px 0; }
 /* benefit-label 제거됨 — 관련 스타일 불필요 */
 
 .benefit-value {
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 800;
   line-height: 1.3;
   color: inherit;   /* 부모 animation 색상 상속 */
@@ -747,7 +745,7 @@ section { padding: 88px 0; }
   /* 기본 상태에서 시작 */
   0%, 100% {
     background: linear-gradient(160deg, #fffcf4 0%, #f4e8ce 100%);
-    color: #7a5210;
+    color: #d0021b;
     border-color: rgba(185,148,74,0.55);
     box-shadow:
       inset 0 1px 0 rgba(255,255,255,0.95),
@@ -766,7 +764,7 @@ section { padding: 88px 0; }
   /* 기본으로 부드럽게 퇴장 (28→33% = 0.225s) */
   33% {
     background: linear-gradient(160deg, #fffcf4 0%, #f4e8ce 100%);
-    color: #7a5210;
+    color: #d0021b;
     border-color: rgba(185,148,74,0.55);
     box-shadow:
       inset 0 1px 0 rgba(255,255,255,0.95),
@@ -1903,7 +1901,7 @@ section { padding: 88px 0; }
 
   .mob-strip-headline {
     font-family: 'Paperlogy', sans-serif;
-    font-size: 15px;
+    font-size: 16.5px;
     font-weight: 800;
     color: #fff;
     line-height: 1.3;
@@ -1913,7 +1911,7 @@ section { padding: 88px 0; }
   /* 혜택 나열 — 기본 흰색, 강조 단어만 점멸 */
   .mob-strip-benef {
     font-family: var(--font);
-    font-size: 12px;
+    font-size: 13.2px;
     font-weight: 600;
     color: #fff;
     line-height: 1.4;
@@ -2314,8 +2312,8 @@ section { padding: 88px 0; }
   /* 히어로 콘텐츠 */
   .hero-cta { flex-direction: row; gap: 8px; }
   .hero-cta .btn { width: 100%; }
-  .hero-benefit-btn { max-width: none; padding: 9px 10px; min-height: 52px; }
-  .benefit-value { font-size: 13px; }
+  .hero-benefit-btn { max-width: none; padding: 9px 6px; min-height: 52px; }
+  .benefit-value { font-size: 15px; }
   .hero-bottom-strip { bottom: 68px; gap: 10px; }
   .hero-info-strip { gap: 20px; }
 
@@ -2529,7 +2527,7 @@ section { padding: 88px 0; }
     margin-top: 6px;
     word-break: keep-all;
   }
-  .hero-badge { font-size: 14px; padding: 7px 16px; letter-spacing: 0.08em; }
+  .hero-badge { font-size: 18px; padding: 7px 16px; letter-spacing: 0.08em; }
   .hero-bottom-strip {
     bottom: 34px;
     left: 12px;
@@ -2552,7 +2550,7 @@ section { padding: 88px 0; }
     width: 100%;
     max-width: none;
     min-height: 0;
-    padding: 8px 10px 9px;
+    padding: 8px 6px 9px;
     align-items: center;
     justify-content: center;
     gap: 4px;
@@ -2565,7 +2563,7 @@ section { padding: 88px 0; }
       0 6px 16px rgba(10, 22, 42, 0.22),
       0 2px 4px rgba(10, 22, 42, 0.12);
   }
-  .benefit-value { font-size: 13px; line-height: 1.2; font-weight: 800; }
+  .benefit-value { font-size: 16px; line-height: 1.2; font-weight: 800; }
 
   .tab-bar {
     flex-wrap: wrap;
@@ -2634,14 +2632,14 @@ section { padding: 88px 0; }
   .hero-bottom-strip .hero-cta { width: min(100%, 170px); max-width: 170px; gap: 4px; }
   .hero-benefit-btn {
     min-height: 0;
-    padding: 7px 9px 8px;
+    padding: 7px 6px 8px;
     gap: 1px;
     border-radius: 11px;
   }
   .benefit-label { font-size: 8px; }
-  .benefit-value { font-size: 12px; line-height: 1.14; }
+  .benefit-value { font-size: 15px; line-height: 1.2; }
   .hero-bottom-strip { bottom: 22px; left: 14px; right: 14px; gap: 7px; }
-  .hero-badge { font-size: 12px; padding: 6px 14px; }
+  .hero-badge { font-size: 17px; padding: 6px 14px; }
   .overview-img { height: 180px; }
   .accordion-q { padding: 14px 14px; }
   .accordion-item.open .accordion-a { padding: 0 14px 16px 14px; }

@@ -47,7 +47,7 @@ const CONFIG = {
      히어로 섹션
   ───────────────────────────── */
   hero: {
-    badge:   "선착순 5세대 · 상담 가능",
+    badge:   "계약자 특별혜택",
     mainCopy: "힐스테이트 수원파크포레만의 특별한 계약조건",
     mainCopyHtml: `힐스테이트 <span class="hero-title-gold">수원파크포레</span>만의 <span class="hero-title-dark">특별한 계약조건</span>`,
     subCopy:  "수원의 중심에서,",

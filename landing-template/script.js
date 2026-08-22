@@ -47,7 +47,7 @@ function applyConfig() {
 
   buildNavMenu();
 
-  el('heroBadge').textContent = '선착순 5세대 · 상담 가능';
+  el('heroBadge').textContent = '계약자 특별혜택';
   el('heroTitle').textContent = '84㎡보다 113㎡가 더 저렴하다면 ?';
   el('heroSub').textContent = '4년전 분양가 그대로 만나는';
   el('heroBrand').textContent = C.propertyName;
