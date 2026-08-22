@@ -2517,7 +2517,7 @@ section { padding: 88px 0; }
   .hero-content { padding: 0 8px; }
   .hero-sub { font-size: 18px; margin-bottom: 10px; line-height: 1.25; }
   .hero-title {
-    font-size: clamp(22px, 6vw, 32px);
+    font-size: clamp(21px, 5.7vw, 30px);
     line-height: 1.12;
     word-break: keep-all;
   }
@@ -2627,7 +2627,7 @@ section { padding: 88px 0; }
   .hero-slide.active > img { animation: kbZoomMob 22s ease-in-out forwards; }
   .hero-body { padding-top: 9vh; }
   .hero-sub { font-size: 16px; }
-  .hero-title { font-size: clamp(19px, 6.6vw, 29px); }
+  .hero-title { font-size: clamp(18px, 6.3vw, 27.5px); }
   .hero-brand { font-size: clamp(28px, 9.5vw, 42px); margin-top: 5px; }
   .hero-bottom-strip .hero-cta { width: min(100%, 170px); max-width: 170px; gap: 4px; }
   .hero-benefit-btn {
