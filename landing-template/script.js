@@ -674,6 +674,48 @@ async function submitContactRequest(payload) {
 }
 
 /* ──────────────────────────────────────────
+   구글 시트 기록 (Apps Script Web App)
+   - call-gate.html / kakao-gate.html 과 완전히 동일한 방식으로 전송합니다.
+     (같은 Web App URL, text/plain 헤더, keepalive)
+   - 앱스 스크립트는 name/phone 을 받아 E·F열에 기록하도록 이미 구성돼 있어
+     스크립트 쪽 수정은 필요 없습니다.
+   - fire-and-forget: 이 요청이 실패하거나 지연돼도 신청 완료 처리,
+     Netlify Blobs 저장, SOLAPI SMS 발송 등 기존 흐름에는 전혀 영향이 없습니다.
+────────────────────────────────────────── */
+const SHEET_LOG_ENDPOINT =
+  'https://script.google.com/macros/s/AKfycbxWO82ShlWmE2T_6mpgQ6R_9IePF_kI_a8Jz0Era2mswmXWuoSitwWARCWwHiBKdh_X/exec';
+
+// 저장돼 있으면 gclid 값을 꺼내 함께 보냅니다. (URL 쿼리 → localStorage 순서, 없으면 빈 문자열)
+function getStoredGclid() {
+  try {
+    const fromUrl = new URLSearchParams(location.search).get('gclid');
+    if (fromUrl) return fromUrl;
+    return localStorage.getItem('gclid') || '';
+  } catch (err) {
+    return '';
+  }
+}
+
+function logLeadToSheet({ name, phone }) {
+  try {
+    fetch(SHEET_LOG_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        type: 'visit',
+        gclid: getStoredGclid(),
+        page: location.pathname,
+        name,
+        phone,
+      }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch (err) {
+    // 구글 시트 기록 실패는 무시 (fire-and-forget)
+  }
+}
+
+/* ──────────────────────────────────────────
    방문예약 폼 (#visit)
 ────────────────────────────────────────── */
 function initContactForm() {
@@ -742,6 +784,8 @@ function initContactForm() {
 
     if (ok) {
       fireNaverConversion('custom003');
+      // 기존 처리(Blobs 저장·SMS)는 이미 성공. 그 뒤에 구글 시트에도 fire-and-forget 로 기록.
+      logLeadToSheet({ name, phone: `${p1}-${p2}-${p3}` });
       window.location.href = 'thank-you.html';
       return;
     }
@@ -834,6 +878,8 @@ function initRegisterForm() {
 
     if (ok) {
       fireNaverConversion('custom003');
+      // 기존 처리(Blobs 저장·SMS)는 이미 성공. 그 뒤에 구글 시트에도 fire-and-forget 로 기록.
+      logLeadToSheet({ name, phone: `${p1}-${p2}-${p3}` });
       window.location.href = 'thank-you.html';
       return;
     }
@@ -926,6 +972,8 @@ function initRegisterFormHero() {
 
     if (ok) {
       fireNaverConversion('custom003');
+      // 기존 처리(Blobs 저장·SMS)는 이미 성공. 그 뒤에 구글 시트에도 fire-and-forget 로 기록.
+      logLeadToSheet({ name, phone: `${p1}-${p2}-${p3}` });
       window.location.href = 'thank-you.html';
       return;
     }
