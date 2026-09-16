@@ -104,11 +104,17 @@ function bindDirectContactTracking() {
 
   CALL_BTN_IDS.forEach(id => {
     const btn = el(id);
-    if (btn) btn.addEventListener('click', () => fireNaverConversion('custom001'));
+    if (btn) btn.addEventListener('click', () => {
+      fireNaverConversion('custom001');
+      logClickToSheet('call-naver');
+    });
   });
   KAKAO_BTN_IDS.forEach(id => {
     const btn = el(id);
-    if (btn) btn.addEventListener('click', () => fireNaverConversion('custom002'));
+    if (btn) btn.addEventListener('click', () => {
+      fireNaverConversion('custom002');
+      logClickToSheet('kakao-naver');
+    });
   });
 }
 
@@ -684,6 +690,7 @@ async function submitContactRequest(payload) {
 ────────────────────────────────────────── */
 const SHEET_LOG_ENDPOINT =
   'https://script.google.com/macros/s/AKfycbxWO82ShlWmE2T_6mpgQ6R_9IePF_kI_a8Jz0Era2mswmXWuoSitwWARCWwHiBKdh_X/exec';
+const SHEET_LOG_SOURCE = 'naver_powerlink';
 
 // 저장돼 있으면 gclid 값을 꺼내 함께 보냅니다. (URL 쿼리 → localStorage 순서, 없으면 빈 문자열)
 function getStoredGclid() {
@@ -696,14 +703,33 @@ function getStoredGclid() {
   }
 }
 
-function logLeadToSheet({ name, phone }) {
+function logClickToSheet(type) {
   try {
     fetch(SHEET_LOG_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({
-        type: 'visit',
+        type,
         gclid: getStoredGclid(),
+        campaign: SHEET_LOG_SOURCE,
+        page: location.pathname,
+      }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch (err) {
+    // 구글 시트 기록 실패는 실제 전화·카카오 연결을 막지 않습니다.
+  }
+}
+
+function logLeadToSheet({ name, phone, type = 'visit' }) {
+  try {
+    fetch(SHEET_LOG_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        type,
+        gclid: getStoredGclid(),
+        campaign: SHEET_LOG_SOURCE,
         page: location.pathname,
         name,
         phone,
@@ -785,7 +811,7 @@ function initContactForm() {
     if (ok) {
       fireNaverConversion('custom003');
       // 기존 처리(Blobs 저장·SMS)는 이미 성공. 그 뒤에 구글 시트에도 fire-and-forget 로 기록.
-      logLeadToSheet({ name, phone: `${p1}-${p2}-${p3}` });
+      logLeadToSheet({ name, phone: `${p1}-${p2}-${p3}`, type: 'visit' });
       window.location.href = 'thank-you.html';
       return;
     }
@@ -879,7 +905,7 @@ function initRegisterForm() {
     if (ok) {
       fireNaverConversion('custom003');
       // 기존 처리(Blobs 저장·SMS)는 이미 성공. 그 뒤에 구글 시트에도 fire-and-forget 로 기록.
-      logLeadToSheet({ name, phone: `${p1}-${p2}-${p3}` });
+      logLeadToSheet({ name, phone: `${p1}-${p2}-${p3}`, type: 'interest' });
       window.location.href = 'thank-you.html';
       return;
     }
@@ -973,7 +999,7 @@ function initRegisterFormHero() {
     if (ok) {
       fireNaverConversion('custom003');
       // 기존 처리(Blobs 저장·SMS)는 이미 성공. 그 뒤에 구글 시트에도 fire-and-forget 로 기록.
-      logLeadToSheet({ name, phone: `${p1}-${p2}-${p3}` });
+      logLeadToSheet({ name, phone: `${p1}-${p2}-${p3}`, type: 'interest' });
       window.location.href = 'thank-you.html';
       return;
     }
